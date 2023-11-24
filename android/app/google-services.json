@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "874229837585",
+    "project_id": "sauapplannerapp",
+    "storage_bucket": "sauapplannerapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:874229837585:android:fb42a436e548d0953de6b0",
+        "android_client_info": {
+          "package_name": "com.example.sauap_planner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAvoZKdybczV29exak3InDudeTfqKcUoWA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
