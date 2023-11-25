@@ -35,7 +35,7 @@ class _SignInPageState extends State<SignInPage> {
     final isValid = _formKey.currentState!.validate();
     if (!isValid) return;
 
-    const mySnackBar = SnackBar(content: Text('Ошибка!'));
+    const mySnackBar = SnackBar(content: Text('Қате!'));
 
     try {
       await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -51,7 +51,7 @@ class _SignInPageState extends State<SignInPage> {
         if (!mounted) return;
         SnackBarService.showSnackBar(
           context,
-          'Неизвестная ошибка! Попробуйте еще раз или обратитесь в поддержку',
+          'Белгісіз қате! Тағы бір рет қайталап көріңіз',
           true,
         );
         return;
@@ -94,7 +94,7 @@ class _SignInPageState extends State<SignInPage> {
                   Column(
                     children: <Widget>[
                       Text(
-                        "Войти",
+                        "Кіру",
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
@@ -149,7 +149,7 @@ class _SignInPageState extends State<SignInPage> {
                                   FilteringTextInputFormatter.deny(
                                       RegExp('[\\ ]')),
                                 ],
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 14,
                                 ),
                               ),
@@ -162,7 +162,7 @@ class _SignInPageState extends State<SignInPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               const Text(
-                                "Пароль",
+                                "Құпия сөз",
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
@@ -230,7 +230,7 @@ class _SignInPageState extends State<SignInPage> {
                         minimumSize: const Size.fromHeight(48),
                       ),
                       child: const Text(
-                        "Войти",
+                        "Кіру",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
@@ -243,7 +243,12 @@ class _SignInPageState extends State<SignInPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      const Text("Нету аккаунта?"),
+                      const Text(
+                        "Аккаунтыңыз жоқ па?",
+                        style: TextStyle(
+                          fontSize: 16,
+                        ),
+                      ),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.transparent,
@@ -252,7 +257,7 @@ class _SignInPageState extends State<SignInPage> {
                         onPressed: () =>
                             Navigator.pushNamed(context, '/signup'),
                         child: const Text(
-                          "Зарегистрироваться",
+                          "Тіркелу",
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             color: Colors.deepPurpleAccent,

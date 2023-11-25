@@ -19,6 +19,9 @@ class CategoriesTile extends StatelessWidget {
     return GestureDetector(
       onTap: () {},
       child: Column(
+        textBaseline: TextBaseline.ideographic,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             width: 80,
@@ -37,6 +40,7 @@ class CategoriesTile extends StatelessWidget {
           Text(
             name,
             style: const TextStyle(fontSize: 16),
+            textAlign: TextAlign.center,
           ),
         ],
       ),

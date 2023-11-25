@@ -1,6 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final _user = FirebaseAuth.instance.currentUser;
@@ -8,7 +7,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   CustomAppBar({super.key});
 
   @override
-  Size get preferredSize => const Size.fromHeight(kToolbarHeight + 22.0);
+  Size get preferredSize => const Size.fromHeight(kToolbarHeight + 25.0);
 
   @override
   Widget build(BuildContext context) {
@@ -19,8 +18,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         top: 20.0,
       ),
       child: AppBar(
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
         backgroundColor: Colors.transparent,
+        systemOverlayStyle: theme.appBarTheme.systemOverlayStyle,
         elevation: 0,
         leading: Padding(
           padding: const EdgeInsets.only(
@@ -50,11 +49,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Welcome back,',
+                    'Қош келдіңіз',
                     style: theme.textTheme.titleSmall,
                   ),
                   Text(
-                    _user != null ? 'Hello, ${_user.displayName}' : 'Hello!',
+                    _user != null ? '${_user.displayName}' : 'Кіру',
                     style: theme.appBarTheme.titleTextStyle,
                   ),
                 ],
@@ -68,7 +67,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             child: IconButton(
               onPressed: () {},
               icon: const Icon(
-                Icons.menu,
+                Icons.dark_mode_outlined,
                 size: 42,
                 color: Colors.black,
               ),

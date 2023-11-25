@@ -1,12 +1,13 @@
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:sauap_planner/src/presentation/widgets/bottom_tabs.dart';
+import 'package:sauap_planner/src/presentation/ui/home/statics.dart';
+import 'package:sauap_planner/src/presentation/ui/home/challengers.dart';
+import 'package:sauap_planner/src/presentation/ui/home/home.dart';
+import 'package:sauap_planner/src/presentation/ui/home/profile.dart';
+import 'package:sauap_planner/src/utils/constants/colors.dart';
 
-// ignore: must_be_immutable
 class Wrapper extends StatefulWidget {
-  Wrapper({super.key, required this.selectedIndex});
-
-  int selectedIndex = 0;
+  const Wrapper({super.key});
 
   @override
   State<Wrapper> createState() => _WrapperState();
@@ -15,56 +16,62 @@ class Wrapper extends StatefulWidget {
 class _WrapperState extends State<Wrapper> {
   int _selectedIndex = 0;
 
+  final _pages = [
+    const Home(),
+    const Challengers(),
+    const Statics(),
+    const Profile(),
+  ];
+
   void _onItemTapped(int index) {
     setState(() {
-      widget.selectedIndex = index;
       _selectedIndex = index;
     });
   }
 
   @override
   void initState() {
-    _onItemTapped(widget.selectedIndex);
+    _onItemTapped(_selectedIndex);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        extendBody: true,
-        body: IndexedStack(
-          index: widget.selectedIndex,
-          children: [
-            for (final tabItem in TabNavigationItem.items) tabItem.page,
-          ],
-        ),
-        bottomNavigationBar: Container(
-          margin: const EdgeInsets.only(
-            bottom: 30,
+    final theme = Theme.of(context);
+
+    return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
+      extendBody: true,
+      body: _pages[_selectedIndex],
+      bottomNavigationBar: CustomNavigationBar(
+        borderRadius: const Radius.circular(15.0),
+        iconSize: 36.0,
+        backgroundColor: Colors.white,
+        items: [
+          CustomNavigationBarItem(
+            icon: const Icon(Icons.home_outlined),
           ),
-          child: CustomNavigationBar(
-            isFloating: true,
-            borderRadius: const Radius.circular(15.0),
-            iconSize: 30.0,
-            backgroundColor: Colors.white,
-            items: [
-              CustomNavigationBarItem(
-                icon: const Icon(Icons.home_outlined),
-              ),
-              CustomNavigationBarItem(
-                icon: const Icon(Icons.favorite_outline),
-              ),
-              CustomNavigationBarItem(
-                icon: const Icon(Icons.notifications_outlined),
-              ),
-              CustomNavigationBarItem(
-                icon: const Icon(Icons.person_outline),
-              )
-            ],
-            currentIndex: _selectedIndex,
-            onTap: _onItemTapped,
+          CustomNavigationBarItem(
+            icon: const Icon(Icons.star_outline_rounded),
           ),
+          CustomNavigationBarItem(
+            icon: const Icon(Icons.analytics_outlined),
+          ),
+          CustomNavigationBarItem(
+            icon: const Icon(Icons.person_outline),
+          )
+        ],
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+      ),
+      floatingActionButton: FloatingActionButton(
+        elevation: 0,
+        backgroundColor: lightBlueColor,
+        onPressed: () {},
+        child: const Icon(
+          Icons.add,
+          size: 36,
+          color: whiteColor,
         ),
       ),
     );

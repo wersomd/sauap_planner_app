@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sauap_planner/src/domain/models/categories.model.dart';
 import 'package:sauap_planner/src/presentation/widgets/appbar/custom_app_bar.dart';
 import 'package:sauap_planner/src/presentation/widgets/categories_tile.dart';
+import 'package:sauap_planner/src/utils/constants/colors.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -25,7 +26,6 @@ class _HomeState extends State<Home> {
     );
 
     return Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: CustomAppBar(),
       body: SingleChildScrollView(
         child: Padding(
@@ -37,61 +37,77 @@ class _HomeState extends State<Home> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text.rich(
-                TextSpan(
-                  text: 'You have ',
-                  style: theme.textTheme.bodyLarge,
-                  children: <TextSpan>[
-                    TextSpan(
-                      text: '10 tasks',
-                      style: TextStyle(
-                        color: Colors.blue[600],
+              Center(
+                child: Text.rich(
+                  TextSpan(
+                    text: 'Орындалмаған ',
+                    style: theme.textTheme.bodyMedium,
+                    children: const <TextSpan>[
+                      TextSpan(
+                        text: '10 тапсырмаңыз',
+                        style: TextStyle(
+                          color: blueColor,
+                        ),
                       ),
-                    ),
-                    const TextSpan(text: ' this week'),
-                  ],
+                      TextSpan(text: ' бар'),
+                    ],
+                  ),
                 ),
               ),
               sizedBox,
               TextField(
                 controller: searchController,
                 decoration: const InputDecoration(
-                  hintText: 'Поиск...',
+                  hintText: 'Іздеу...',
                   hintStyle: TextStyle(
                     fontSize: 18,
+                    fontWeight: FontWeight.normal,
                   ),
                   border: OutlineInputBorder(
-                    borderSide: BorderSide.none,
+                    borderSide: BorderSide(
+                      width: 1,
+                      color: Colors.grey,
+                    ),
                     borderRadius: BorderRadius.all(
                       Radius.circular(6.0),
                     ),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide.none,
+                    borderSide: BorderSide(
+                      width: 1,
+                      color: Colors.grey,
+                    ),
                     borderRadius: BorderRadius.all(
                       Radius.circular(6.0),
                     ),
                   ),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide.none,
+                    borderSide: BorderSide(
+                      width: 1,
+                      color: Colors.grey,
+                    ),
                     borderRadius: BorderRadius.all(
                       Radius.circular(6.0),
                     ),
                   ),
                   prefixIcon: Icon(
                     Icons.search,
+                    size: 30,
+                  ),
+                  suffixIcon: Icon(
+                    Icons.keyboard_voice_outlined,
+                    size: 30,
                   ),
                 ),
                 style: const TextStyle(
-                  fontSize: 18,
-                ),
+                    fontSize: 18, fontWeight: FontWeight.normal),
               ),
               sizedBox,
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Categories',
+                    'Категориялар',
                     style: theme.textTheme.titleLarge,
                   ),
                   ElevatedButton(
@@ -102,7 +118,7 @@ class _HomeState extends State<Home> {
                     ),
                     onPressed: () {},
                     child: Text(
-                      'View all',
+                      'Барлығы',
                       style: theme.textTheme.labelSmall,
                     ),
                   ),
@@ -111,7 +127,7 @@ class _HomeState extends State<Home> {
               sizedBox,
               SizedBox(
                 width: size.width,
-                height: 120,
+                height: 160,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   itemCount: itemCount,
@@ -131,8 +147,8 @@ class _HomeState extends State<Home> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Today's task",
-                    style: theme.textTheme.titleLarge,
+                    'Бүгінгі тапсырмалар',
+                    style: theme.textTheme.titleMedium,
                   ),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
@@ -140,9 +156,11 @@ class _HomeState extends State<Home> {
                       elevation: 0,
                       textStyle: theme.textTheme.labelSmall,
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.of(context).pushNamed('/details');
+                    },
                     child: Text(
-                      'View all',
+                      'Барлығы',
                       style: theme.textTheme.labelSmall,
                     ),
                   ),

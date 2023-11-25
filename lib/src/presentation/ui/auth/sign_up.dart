@@ -55,7 +55,7 @@ class _SignUpPageState extends State<SignUpPage> {
         if (!mounted) return;
         SnackBarService.showSnackBar(
           context,
-          'Такой Email уже используется, повторите попытку с использованием другого Email',
+          'Бұл Email қолданылады! Басқасын көріңіз!',
           true,
         );
         return;
@@ -63,7 +63,7 @@ class _SignUpPageState extends State<SignUpPage> {
         if (!mounted) return;
         SnackBarService.showSnackBar(
           context,
-          'Неизвестная ошибка! Попробуйте еще раз или обратитесь в поддержку.',
+          'Белгісіз қате! Басынан қайталап көріңіз!',
           true,
         );
       }
@@ -104,7 +104,7 @@ class _SignUpPageState extends State<SignUpPage> {
                   const Column(
                     children: <Widget>[
                       Text(
-                        "Регистрация",
+                        "Тіркелу",
                         style: TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.bold,
@@ -123,7 +123,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               const Text(
-                                "Имя",
+                                "Аты",
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
@@ -203,7 +203,7 @@ class _SignUpPageState extends State<SignUpPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               const Text(
-                                "Пароль",
+                                "Құпия сөз",
                                 style: TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w400,
@@ -247,7 +247,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                     },
                                   ),
                                 ),
-                                style: TextStyle(
+                                style: const TextStyle(
                                   fontSize: 16,
                                 ),
                               ),
@@ -271,7 +271,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         minimumSize: const Size.fromHeight(48),
                       ),
                       child: const Text(
-                        "Зарегистрироваться",
+                        "Тіркелу",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: Colors.white,
@@ -284,7 +284,12 @@ class _SignUpPageState extends State<SignUpPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
-                      const Text("Есть аккаунт?"),
+                      const Text(
+                        "Аккаунтыңыз бар ма?",
+                        style: TextStyle(
+                          fontSize: 18,
+                        ),
+                      ),
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.transparent,
@@ -299,7 +304,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           );
                         },
                         child: const Text(
-                          "Войти",
+                          "Кіру",
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             color: Colors.deepPurpleAccent,

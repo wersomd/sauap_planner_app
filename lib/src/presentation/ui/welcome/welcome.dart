@@ -63,7 +63,7 @@ class _WelcomeState extends State<Welcome> {
                     child: Column(
                       children: [
                         Container(
-                          height: 400,
+                          height: 300,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(30.0),
                             image: DecorationImage(
@@ -140,7 +140,7 @@ class _WelcomeState extends State<Welcome> {
                                   fontSize: (size.width <= 550) ? 13 : 17),
                             ),
                             child: Text(
-                              "Начать".toUpperCase(),
+                              "Бастау".toUpperCase(),
                               style: const TextStyle(
                                 color: Colors.white,
                                 letterSpacing: 1.3,
@@ -166,7 +166,7 @@ class _WelcomeState extends State<Welcome> {
                                   ),
                                 ),
                                 child: Text(
-                                  "Пропустить".toUpperCase(),
+                                  "Өткізу".toUpperCase(),
                                   style: const TextStyle(
                                     color: Colors.black,
                                   ),
@@ -199,7 +199,7 @@ class _WelcomeState extends State<Welcome> {
                                   ),
                                 ),
                                 child: Text(
-                                  "Следующий".toUpperCase(),
+                                  "Келесі".toUpperCase(),
                                   style: const TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,

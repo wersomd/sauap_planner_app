@@ -20,24 +20,24 @@ List<CategoriesModel> categoriesModel = [
     icon: Icons.shopping_cart,
     iconColor: blueColor,
     tileColor: whiteColor,
-    name: 'Shopping',
+    name: 'Білім',
   ),
   const CategoriesModel(
     icon: Icons.school,
     iconColor: blueColor,
     tileColor: whiteColor,
-    name: 'Class',
+    name: 'Медицина',
   ),
   const CategoriesModel(
     icon: Icons.work,
     iconColor: blueColor,
     tileColor: whiteColor,
-    name: 'Work',
+    name: 'Бизнес',
   ),
   const CategoriesModel(
     icon: Icons.cleaning_services,
     iconColor: blueColor,
     tileColor: whiteColor,
-    name: 'Clean',
+    name: 'Жеке',
   )
 ];
