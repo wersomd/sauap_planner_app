@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sauap_planner/src/config/theme/theme.dart';
 import 'package:sauap_planner/src/domain/models/categories.model.dart';
 import 'package:sauap_planner/src/presentation/widgets/appbar/custom_app_bar.dart';
 import 'package:sauap_planner/src/presentation/widgets/categories_tile.dart';
+import 'package:sauap_planner/src/presentation/widgets/progress_card.dart';
 import 'package:sauap_planner/src/utils/constants/colors.dart';
 
 class Home extends StatefulWidget {
@@ -26,6 +28,7 @@ class _HomeState extends State<Home> {
     );
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: CustomAppBar(),
       body: SingleChildScrollView(
         child: Padding(
@@ -40,8 +43,8 @@ class _HomeState extends State<Home> {
               Center(
                 child: Text.rich(
                   TextSpan(
-                    text: 'Орындалмаған ',
-                    style: theme.textTheme.bodyMedium,
+                    text: 'Сіздің осы аптадағы жасалмаған ',
+                    style: homeTitle,
                     children: const <TextSpan>[
                       TextSpan(
                         text: '10 тапсырмаңыз',
@@ -49,7 +52,9 @@ class _HomeState extends State<Home> {
                           color: blueColor,
                         ),
                       ),
-                      TextSpan(text: ' бар'),
+                      TextSpan(
+                        text: ' бар',
+                      ),
                     ],
                   ),
                 ),
@@ -57,6 +62,7 @@ class _HomeState extends State<Home> {
               sizedBox,
               TextField(
                 controller: searchController,
+                cursorColor: blueColor,
                 decoration: const InputDecoration(
                   hintText: 'Іздеу...',
                   hintStyle: TextStyle(
@@ -90,6 +96,8 @@ class _HomeState extends State<Home> {
                       Radius.circular(6.0),
                     ),
                   ),
+                  isDense: true,
+                  contentPadding: EdgeInsets.all(10),
                   prefixIcon: Icon(
                     Icons.search,
                     size: 30,
@@ -100,7 +108,9 @@ class _HomeState extends State<Home> {
                   ),
                 ),
                 style: const TextStyle(
-                    fontSize: 18, fontWeight: FontWeight.normal),
+                  fontSize: 18,
+                  fontWeight: FontWeight.normal,
+                ),
               ),
               sizedBox,
               Row(
@@ -110,8 +120,8 @@ class _HomeState extends State<Home> {
                     'Категориялар',
                     style: theme.textTheme.titleLarge,
                   ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
+                  TextButton(
+                    style: TextButton.styleFrom(
                       backgroundColor: Colors.transparent,
                       elevation: 0,
                       textStyle: theme.textTheme.labelSmall,
@@ -124,11 +134,11 @@ class _HomeState extends State<Home> {
                   ),
                 ],
               ),
-              sizedBox,
               SizedBox(
                 width: size.width,
-                height: 160,
+                height: 140,
                 child: ListView.separated(
+                  shrinkWrap: true,
                   scrollDirection: Axis.horizontal,
                   itemCount: itemCount,
                   itemBuilder: (context, index) => CategoriesTile(
@@ -138,7 +148,7 @@ class _HomeState extends State<Home> {
                     name: categoriesModel[index].name,
                   ),
                   separatorBuilder: (content, index) => const SizedBox(
-                    width: 24.0,
+                    width: 32.0,
                   ),
                 ),
               ),
@@ -148,10 +158,10 @@ class _HomeState extends State<Home> {
                 children: [
                   Text(
                     'Бүгінгі тапсырмалар',
-                    style: theme.textTheme.titleMedium,
+                    style: theme.textTheme.titleLarge,
                   ),
-                  ElevatedButton(
-                    style: ElevatedButton.styleFrom(
+                  TextButton(
+                    style: TextButton.styleFrom(
                       backgroundColor: Colors.transparent,
                       elevation: 0,
                       textStyle: theme.textTheme.labelSmall,
@@ -165,7 +175,32 @@ class _HomeState extends State<Home> {
                     ),
                   ),
                 ],
-              )
+              ),
+              const Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  ProgressCard(
+                    projectName: "Физикалық қозғалыс",
+                    completedPercent: 50,
+                  ),
+                  ProgressCard(
+                    projectName: "Ағылшын тілі",
+                    completedPercent: 50,
+                  ),
+                  ProgressCard(
+                    projectName: "Таңғы ас ішу",
+                    completedPercent: 30,
+                  ),
+                  ProgressCard(
+                    projectName: "Таңғы ас ішу",
+                    completedPercent: 30,
+                  ),
+                  ProgressCard(
+                    projectName: "Таңғы ас ішу",
+                    completedPercent: 30,
+                  ),
+                ],
+              ),
             ],
           ),
         ),

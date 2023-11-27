@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:sauap_planner/src/utils/constants/colors.dart';
 
 final appTheme = ThemeData(
@@ -16,8 +17,8 @@ final appTheme = ThemeData(
       fontWeight: FontWeight.w700,
     ),
     titleLarge: TextStyle(
-      fontSize: 30,
-      fontWeight: FontWeight.bold,
+      fontSize: 24,
+      fontWeight: FontWeight.w500,
     ),
     titleMedium: TextStyle(
       fontSize: 26,
@@ -49,3 +50,10 @@ final appTheme = ThemeData(
     backgroundColor: blueColor,
   ),
 );
+
+TextStyle get homeTitle {
+  return GoogleFonts.inter(
+    fontSize: 24,
+    color: Colors.black,
+  );
+}

@@ -18,26 +18,26 @@ class CategoriesModel {
 List<CategoriesModel> categoriesModel = [
   const CategoriesModel(
     icon: Icons.shopping_cart,
-    iconColor: blueColor,
-    tileColor: whiteColor,
+    iconColor: whiteColor,
+    tileColor: blueColor,
     name: 'Білім',
   ),
   const CategoriesModel(
     icon: Icons.school,
-    iconColor: blueColor,
-    tileColor: whiteColor,
+    iconColor: whiteColor,
+    tileColor: blueColor,
     name: 'Медицина',
   ),
   const CategoriesModel(
     icon: Icons.work,
-    iconColor: blueColor,
-    tileColor: whiteColor,
+    iconColor: whiteColor,
+    tileColor: blueColor,
     name: 'Бизнес',
   ),
   const CategoriesModel(
     icon: Icons.cleaning_services,
-    iconColor: blueColor,
-    tileColor: whiteColor,
+    iconColor: whiteColor,
+    tileColor: blueColor,
     name: 'Жеке',
   )
 ];

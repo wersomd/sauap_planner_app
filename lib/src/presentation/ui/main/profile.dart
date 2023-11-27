@@ -1,5 +1,4 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sauap_planner/src/utils/constants/colors.dart';
 
@@ -183,39 +182,6 @@ class _ProfileState extends State<Profile> {
             ),
           ),
           const SizedBox(
-            height: 10,
-          ),
-          const Padding(
-            padding: EdgeInsets.only(left: 25, right: 25),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          "Overview",
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 20,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
-                Text("Jan 16, 2023",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 13,
-                      color: Colors.black,
-                    )),
-              ],
-            ),
-          ),
-          const SizedBox(
             height: 60,
           ),
           Padding(
@@ -224,7 +190,7 @@ class _ProfileState extends State<Profile> {
               children: [
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: pinkColor,
+                    backgroundColor: blueColor,
                     elevation: 0,
                     minimumSize: const Size(
                       300,

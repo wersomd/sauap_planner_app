@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sauap_planner/src/presentation/widgets/snack_bar.dart';
+import 'package:sauap_planner/src/utils/constants/colors.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -132,7 +133,7 @@ class _SignInPageState extends State<SignInPage> {
                                   hintText: "account@gmail.com",
                                   prefixIcon: Icon(
                                     Icons.mail,
-                                    color: Colors.deepPurpleAccent,
+                                    color: blueColor,
                                   ),
                                   contentPadding: EdgeInsets.symmetric(
                                     vertical: 0,
@@ -179,7 +180,7 @@ class _SignInPageState extends State<SignInPage> {
                                   hintText: "*******",
                                   prefixIcon: const Icon(
                                     Icons.lock,
-                                    color: Colors.deepPurpleAccent,
+                                    color: blueColor,
                                   ),
                                   contentPadding: const EdgeInsets.symmetric(
                                     vertical: 0,
@@ -226,7 +227,7 @@ class _SignInPageState extends State<SignInPage> {
                         login();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.deepPurpleAccent,
+                        backgroundColor: blueColor,
                         minimumSize: const Size.fromHeight(48),
                       ),
                       child: const Text(
@@ -246,7 +247,7 @@ class _SignInPageState extends State<SignInPage> {
                       const Text(
                         "Аккаунтыңыз жоқ па?",
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 14,
                         ),
                       ),
                       ElevatedButton(
@@ -260,7 +261,7 @@ class _SignInPageState extends State<SignInPage> {
                           "Тіркелу",
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            color: Colors.deepPurpleAccent,
+                            color: blueColor,
                             fontSize: 16,
                           ),
                         ),

@@ -1,7 +1,7 @@
 import 'package:sauap_planner/src/presentation/ui/auth/sign_in.dart';
 import 'package:sauap_planner/src/presentation/ui/auth/sign_up.dart';
-import 'package:sauap_planner/src/presentation/ui/home/details.dart';
-import 'package:sauap_planner/src/presentation/ui/home/home.dart';
+import 'package:sauap_planner/src/presentation/ui/main/details.dart';
+import 'package:sauap_planner/src/presentation/ui/main/home.dart';
 import 'package:sauap_planner/src/presentation/ui/splash/splash.dart';
 import 'package:sauap_planner/src/presentation/ui/welcome/welcome.dart';
 import 'package:sauap_planner/src/presentation/ui/wrapper/wrapper.dart';

@@ -41,6 +41,14 @@ dependencies:
   page_transition: ^2.1.0
   firebase_auth: ^4.14.0
   custom_navigation_bar: ^0.8.2
+  intl: ^0.18.1
+  flutter_localization: ^0.1.14
+
+  flutter_localizations:
+    sdk: flutter
+  google_fonts: ^6.1.0
+  date_picker_timeline: ^1.2.5
+  flutter_calendar_carousel: ^2.4.2
 
 dev_dependencies:
   flutter_test:

@@ -1,9 +1,9 @@
 import 'package:custom_navigation_bar/custom_navigation_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:sauap_planner/src/presentation/ui/home/statics.dart';
-import 'package:sauap_planner/src/presentation/ui/home/challengers.dart';
-import 'package:sauap_planner/src/presentation/ui/home/home.dart';
-import 'package:sauap_planner/src/presentation/ui/home/profile.dart';
+import 'package:sauap_planner/src/presentation/ui/main/statics.dart';
+import 'package:sauap_planner/src/presentation/ui/main/calendar.dart';
+import 'package:sauap_planner/src/presentation/ui/main/home.dart';
+import 'package:sauap_planner/src/presentation/ui/main/profile.dart';
 import 'package:sauap_planner/src/utils/constants/colors.dart';
 
 class Wrapper extends StatefulWidget {
@@ -18,7 +18,7 @@ class _WrapperState extends State<Wrapper> {
 
   final _pages = [
     const Home(),
-    const Challengers(),
+    const Calendar(),
     const Statics(),
     const Profile(),
   ];
@@ -52,7 +52,7 @@ class _WrapperState extends State<Wrapper> {
             icon: const Icon(Icons.home_outlined),
           ),
           CustomNavigationBarItem(
-            icon: const Icon(Icons.star_outline_rounded),
+            icon: const Icon(Icons.calendar_month_outlined),
           ),
           CustomNavigationBarItem(
             icon: const Icon(Icons.analytics_outlined),

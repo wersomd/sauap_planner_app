@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sauap_planner/src/presentation/ui/auth/sign_in.dart';
+import 'package:sauap_planner/src/utils/constants/colors.dart';
 
 import '../../widgets/snack_bar.dart';
 
@@ -134,10 +135,10 @@ class _SignUpPageState extends State<SignUpPage> {
                               TextField(
                                 controller: _nameController,
                                 decoration: const InputDecoration(
-                                  hintText: "Kazybek",
+                                  hintText: "Асия",
                                   prefixIcon: Icon(
                                     Icons.person,
-                                    color: Colors.deepPurpleAccent,
+                                    color: blueColor,
                                   ),
                                   contentPadding: EdgeInsets.symmetric(
                                     vertical: 0,
@@ -177,7 +178,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   hintText: "account@gmail.com",
                                   prefixIcon: Icon(
                                     Icons.mail,
-                                    color: Colors.deepPurpleAccent,
+                                    color: blueColor,
                                   ),
                                   contentPadding: EdgeInsets.symmetric(
                                     vertical: 0,
@@ -220,7 +221,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   hintText: "*******",
                                   prefixIcon: const Icon(
                                     Icons.lock,
-                                    color: Colors.deepPurpleAccent,
+                                    color: blueColor,
                                   ),
                                   contentPadding: const EdgeInsets.symmetric(
                                     vertical: 0,
@@ -267,7 +268,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         signUp();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.deepPurpleAccent,
+                        backgroundColor: blueColor,
                         minimumSize: const Size.fromHeight(48),
                       ),
                       child: const Text(
@@ -287,7 +288,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       const Text(
                         "Аккаунтыңыз бар ма?",
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 14,
                         ),
                       ),
                       ElevatedButton(
@@ -307,7 +308,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           "Кіру",
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            color: Colors.deepPurpleAccent,
+                            color: blueColor,
                             fontSize: 16,
                           ),
                         ),
