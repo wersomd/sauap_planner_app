@@ -39,5 +39,5 @@ List<CategoriesModel> categoriesModel = [
     iconColor: whiteColor,
     tileColor: blueColor,
     name: 'Жеке',
-  )
+  ),
 ];

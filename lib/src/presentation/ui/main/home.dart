@@ -147,8 +147,8 @@ class _HomeState extends State<Home> {
                     tileColor: categoriesModel[index].tileColor,
                     name: categoriesModel[index].name,
                   ),
-                  separatorBuilder: (content, index) => const SizedBox(
-                    width: 32.0,
+                  separatorBuilder: (content, index) => SizedBox(
+                    width: size.width / 10,
                   ),
                 ),
               ),
