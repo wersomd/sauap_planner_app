@@ -4,14 +4,14 @@ import 'package:flutter/services.dart';
 import 'package:sauap_planner/components/snackbar.dart';
 import 'package:sauap_planner/utils/color_palette.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<SignInPage> createState() => _SignInPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _LoginPageState extends State<LoginPage> {
   bool _obscurePass = false;
   final _mailController = TextEditingController();
   final _passwordController = TextEditingController();
@@ -133,7 +133,7 @@ class _SignInPageState extends State<SignInPage> {
                                   hintText: "account@gmail.com",
                                   prefixIcon: Icon(
                                     Icons.mail,
-                                    color: blueColor,
+                                    color: kPrimaryColor,
                                   ),
                                   contentPadding: EdgeInsets.symmetric(
                                     vertical: 0,
@@ -180,7 +180,7 @@ class _SignInPageState extends State<SignInPage> {
                                   hintText: "*******",
                                   prefixIcon: const Icon(
                                     Icons.lock,
-                                    color: blueColor,
+                                    color: kPrimaryColor,
                                   ),
                                   contentPadding: const EdgeInsets.symmetric(
                                     vertical: 0,
@@ -227,7 +227,7 @@ class _SignInPageState extends State<SignInPage> {
                         login();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: blueColor,
+                        backgroundColor: kPrimaryColor,
                         minimumSize: const Size.fromHeight(48),
                       ),
                       child: const Text(
@@ -255,13 +255,12 @@ class _SignInPageState extends State<SignInPage> {
                           backgroundColor: Colors.transparent,
                           elevation: 0,
                         ),
-                        onPressed: () =>
-                            Navigator.pushNamed(context, '/signup'),
+                        onPressed: () => Navigator.pushNamed(context, ''),
                         child: const Text(
                           "Тіркелу",
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            color: blueColor,
+                            color: kPrimaryColor,
                             fontSize: 16,
                           ),
                         ),

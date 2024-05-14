@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sauap_planner/routes/pages.dart';
 import 'package:sauap_planner/screens/onboarding/model/onboarding.model.dart';
 
 class Onboarding extends StatefulWidget {
@@ -123,7 +124,7 @@ class _OnboardingState extends State<Onboarding> {
                           padding: const EdgeInsets.all(30),
                           child: ElevatedButton(
                             onPressed: () {
-                              Navigator.pushNamed(context, '/home');
+                              Navigator.pushNamed(context, Pages.wrapper);
                             },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.black,

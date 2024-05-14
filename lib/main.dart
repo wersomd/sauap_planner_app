@@ -1,6 +1,9 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sauap_planner/bloc_observer.dart';
+import 'package:sauap_planner/firebase_options.dart';
 import 'package:sauap_planner/routes/app_router.dart';
 import 'package:sauap_planner/routes/pages.dart';
 import 'package:sauap_planner/tasks/data/local/data_sources/tasks_data_provider.dart';
@@ -11,11 +14,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   Bloc.observer = BlocStateOberver();
   SharedPreferences preferences = await SharedPreferences.getInstance();
-  runApp(MyApp(
-    preferences: preferences,
-  ));
+  runApp(
+    MyApp(
+      preferences: preferences,
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -31,6 +39,15 @@ class MyApp extends StatelessWidget {
       child: BlocProvider(
         create: (context) => TasksBloc(context.read<TaskRepository>()),
         child: MaterialApp(
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: const [
+            Locale('kk'),
+            Locale('ru'),
+          ],
           title: 'Sauap Planner',
           debugShowCheckedModeBanner: false,
           initialRoute: Pages.initial,

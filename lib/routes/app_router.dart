@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sauap_planner/routes/pages.dart';
+import 'package:sauap_planner/screens/auth/login/login.dart';
+import 'package:sauap_planner/screens/auth/registration/signup.dart';
+import 'package:sauap_planner/screens/billing/billing.dart';
+import 'package:sauap_planner/screens/calendar/calendar.dart';
 import 'package:sauap_planner/screens/onboarding/onboarding.dart';
-import 'package:sauap_planner/screens/splash/splash_screen.dart';
+import 'package:sauap_planner/screens/profile/profile.dart';
+import 'package:sauap_planner/screens/splash/splash.dart';
 import 'package:sauap_planner/screens/wrapper/wrapper.dart';
 import 'package:sauap_planner/tasks/data/local/model/task_model.dart';
 import 'package:sauap_planner/tasks/presentation/pages/new_task_screen.dart';
@@ -31,6 +36,26 @@ Route onGenerateRoute(RouteSettings routeSettings) {
     case Pages.createNewTask:
       return MaterialPageRoute(
         builder: (context) => const NewTaskScreen(),
+      );
+    case Pages.login:
+      return MaterialPageRoute(
+        builder: (context) => const LoginPage(),
+      );
+    case Pages.signup:
+      return MaterialPageRoute(
+        builder: (context) => const SignUpPage(),
+      );
+    case Pages.billing:
+      return MaterialPageRoute(
+        builder: (context) => const BillingPage(),
+      );
+    case Pages.calendar:
+      return MaterialPageRoute(
+        builder: (context) => const CalendarPage(),
+      );
+    case Pages.profile:
+      return MaterialPageRoute(
+        builder: (context) => const ProfilePage(),
       );
     case Pages.updateTask:
       final args = routeSettings.arguments as TaskModel;

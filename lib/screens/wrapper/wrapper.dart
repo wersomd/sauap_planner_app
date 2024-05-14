@@ -1,7 +1,10 @@
-import 'package:custom_navigation_bar/custom_navigation_bar.dart';
+import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:sauap_planner/screens/auth/login/login.dart';
+import 'package:sauap_planner/routes/pages.dart';
+import 'package:sauap_planner/screens/page_not_found/page_not_found.dart';
 import 'package:sauap_planner/tasks/presentation/pages/tasks_screen.dart';
+import 'package:sauap_planner/utils/color_palette.dart';
 
 class Wrapper extends StatefulWidget {
   const Wrapper({super.key});
@@ -13,11 +16,18 @@ class Wrapper extends StatefulWidget {
 class _WrapperState extends State<Wrapper> {
   int _selectedIndex = 0;
 
+  final _iconList = <IconData>[
+    Icons.home_outlined,
+    Icons.calendar_month_outlined,
+    Icons.money_outlined,
+    Icons.person_2_outlined,
+  ];
+
   final _pages = [
     const TasksScreen(),
-    const SignInPage(),
-    const SignInPage(),
-    const SignInPage(),
+    const PageNotFound(),
+    const PageNotFound(),
+    const PageNotFound(),
   ];
 
   void _onItemTapped(int index) {
@@ -40,26 +50,31 @@ class _WrapperState extends State<Wrapper> {
       backgroundColor: theme.scaffoldBackgroundColor,
       extendBody: true,
       body: _pages[_selectedIndex],
-      bottomNavigationBar: CustomNavigationBar(
-        borderRadius: const Radius.circular(15.0),
-        iconSize: 36.0,
-        backgroundColor: Colors.white,
-        items: [
-          CustomNavigationBarItem(
-            icon: const Icon(Icons.home_outlined),
-          ),
-          CustomNavigationBarItem(
-            icon: const Icon(Icons.calendar_month_outlined),
-          ),
-          CustomNavigationBarItem(
-            icon: const Icon(Icons.analytics_outlined),
-          ),
-          CustomNavigationBarItem(
-            icon: const Icon(Icons.person_outline),
-          )
-        ],
-        currentIndex: _selectedIndex,
+      floatingActionButton: FloatingActionButton(
+        splashColor: kPrimaryColor,
+        backgroundColor: kPrimaryColor,
+        elevation: 0,
+        child: const Icon(
+          CupertinoIcons.add,
+          color: kWhiteColor,
+          size: 40,
+        ),
+        onPressed: () {
+          Navigator.pushNamed(context, Pages.createNewTask);
+        },
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: AnimatedBottomNavigationBar(
+        borderColor: kGrey3,
+        icons: _iconList,
+        iconSize: 30,
+        scaleFactor: .5,
+        activeIndex: _selectedIndex,
+        gapLocation: GapLocation.center,
         onTap: _onItemTapped,
+        notchSmoothness: NotchSmoothness.verySmoothEdge,
+        activeColor: Colors.purple,
+        inactiveColor: Colors.black,
       ),
     );
   }

@@ -137,7 +137,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   hintText: "Асия",
                                   prefixIcon: Icon(
                                     Icons.person,
-                                    color: blueColor,
+                                    color: kPrimaryColor,
                                   ),
                                   contentPadding: EdgeInsets.symmetric(
                                     vertical: 0,
@@ -177,7 +177,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   hintText: "account@gmail.com",
                                   prefixIcon: Icon(
                                     Icons.mail,
-                                    color: blueColor,
+                                    color: kPrimaryColor,
                                   ),
                                   contentPadding: EdgeInsets.symmetric(
                                     vertical: 0,
@@ -220,7 +220,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   hintText: "*******",
                                   prefixIcon: const Icon(
                                     Icons.lock,
-                                    color: blueColor,
+                                    color: kPrimaryColor,
                                   ),
                                   contentPadding: const EdgeInsets.symmetric(
                                     vertical: 0,
@@ -267,7 +267,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         signUp();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: blueColor,
+                        backgroundColor: kPrimaryColor,
                         minimumSize: const Size.fromHeight(48),
                       ),
                       child: const Text(
@@ -299,7 +299,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const SignInPage(),
+                              builder: (context) => const LoginPage(),
                             ),
                           );
                         },
@@ -307,7 +307,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           "Кіру",
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
-                            color: blueColor,
+                            color: kPrimaryColor,
                             fontSize: 16,
                           ),
                         ),

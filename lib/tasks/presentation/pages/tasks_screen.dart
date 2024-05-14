@@ -11,7 +11,6 @@ import 'package:sauap_planner/utils/color_palette.dart';
 import 'package:sauap_planner/utils/util.dart';
 
 import '../../../components/widgets.dart';
-import '../../../routes/pages.dart';
 import '../../../utils/font_sizes.dart';
 
 class TasksScreen extends StatefulWidget {
@@ -41,7 +40,7 @@ class _TasksScreenState extends State<TasksScreen> {
         child: Scaffold(
           backgroundColor: kWhiteColor,
           appBar: CustomAppBar(
-            title: 'Сіз тіркелмедіңіз',
+            title: "Сіз тіркелмедіңіз",
             showBackArrow: false,
             actionWidgets: [
               PopupMenuButton<int>(
@@ -150,66 +149,70 @@ class _TasksScreenState extends State<TasksScreen> {
             ],
           ),
           body: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: () => FocusScope.of(context).unfocus(),
-              child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: BlocConsumer<TasksBloc, TasksState>(
-                      listener: (context, state) {
-                    if (state is LoadTaskFailure) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(getSnackBar(state.error, kRed));
-                    }
+            behavior: HitTestBehavior.opaque,
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: BlocConsumer<TasksBloc, TasksState>(
+                listener: (context, state) {
+                  if (state is LoadTaskFailure) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(getSnackBar(state.error, kRed));
+                  }
 
-                    if (state is AddTaskFailure || state is UpdateTaskFailure) {
-                      context.read<TasksBloc>().add(FetchTaskEvent());
-                    }
-                  }, builder: (context, state) {
-                    if (state is TasksLoading) {
-                      return const Center(
-                        child: CupertinoActivityIndicator(),
-                      );
-                    }
+                  if (state is AddTaskFailure || state is UpdateTaskFailure) {
+                    context.read<TasksBloc>().add(FetchTaskEvent());
+                  }
+                },
+                builder: (context, state) {
+                  if (state is TasksLoading) {
+                    return const Center(
+                      child: CupertinoActivityIndicator(),
+                    );
+                  }
 
-                    if (state is LoadTaskFailure) {
-                      return Center(
-                        child: buildText(
-                            state.error,
-                            kBlackColor,
-                            textMedium,
-                            FontWeight.normal,
-                            TextAlign.center,
-                            TextOverflow.clip),
-                      );
-                    }
+                  if (state is LoadTaskFailure) {
+                    return Center(
+                      child: buildText(
+                          state.error,
+                          kBlackColor,
+                          textMedium,
+                          FontWeight.normal,
+                          TextAlign.center,
+                          TextOverflow.clip),
+                    );
+                  }
 
-                    if (state is FetchTasksSuccess) {
-                      return state.tasks.isNotEmpty || state.isSearching
-                          ? Column(
-                              children: [
-                                BuildTextField(
-                                    hint: "Search recent task",
-                                    controller: searchController,
-                                    inputType: TextInputType.text,
-                                    prefixIcon: const Icon(
-                                      Icons.search,
-                                      color: kGrey2,
-                                    ),
-                                    fillColor: kWhiteColor,
-                                    onChange: (value) {
-                                      context.read<TasksBloc>().add(
-                                          SearchTaskEvent(keywords: value));
-                                    }),
-                                const SizedBox(
-                                  height: 20,
+                  if (state is FetchTasksSuccess) {
+                    return state.tasks.isNotEmpty || state.isSearching
+                        ? Column(
+                            children: [
+                              BuildTextField(
+                                hint: "Search recent task",
+                                controller: searchController,
+                                inputType: TextInputType.text,
+                                prefixIcon: const Icon(
+                                  Icons.search,
+                                  color: kGrey2,
                                 ),
-                                Expanded(
-                                    child: ListView.separated(
+                                fillColor: kWhiteColor,
+                                onChange: (value) {
+                                  context.read<TasksBloc>().add(
+                                        SearchTaskEvent(keywords: value),
+                                      );
+                                },
+                              ),
+                              const SizedBox(
+                                height: 20,
+                              ),
+                              Expanded(
+                                child: ListView.separated(
                                   shrinkWrap: true,
                                   itemCount: state.tasks.length,
                                   itemBuilder: (context, index) {
                                     return TaskItemView(
-                                        taskModel: state.tasks[index]);
+                                      taskModel: state.tasks[index],
+                                    );
                                   },
                                   separatorBuilder:
                                       (BuildContext context, int index) {
@@ -217,51 +220,55 @@ class _TasksScreenState extends State<TasksScreen> {
                                       color: kGrey3,
                                     );
                                   },
-                                ))
+                                ),
+                              )
+                            ],
+                          )
+                        : Center(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SvgPicture.asset(
+                                  'assets/svgs/tasks.svg',
+                                  height: size.height * .20,
+                                  width: size.width,
+                                ),
+                                const SizedBox(
+                                  height: 50,
+                                ),
+                                buildText(
+                                    'Тапсырмаларды жоспарлаңыз',
+                                    kBlackColor,
+                                    textBold,
+                                    FontWeight.w600,
+                                    TextAlign.center,
+                                    TextOverflow.clip),
+                                buildText(
+                                    'Тапсырмаларды оңай әрі жеңіл орындаңыз',
+                                    kBlackColor.withOpacity(.5),
+                                    textMedium,
+                                    FontWeight.normal,
+                                    TextAlign.center,
+                                    TextOverflow.clip),
                               ],
-                            )
-                          : Center(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  SvgPicture.asset(
-                                    'assets/svgs/tasks.svg',
-                                    height: size.height * .20,
-                                    width: size.width,
-                                  ),
-                                  const SizedBox(
-                                    height: 50,
-                                  ),
-                                  buildText(
-                                      'Тапсырмаларды жоспарлаңыз',
-                                      kBlackColor,
-                                      textBold,
-                                      FontWeight.w600,
-                                      TextAlign.center,
-                                      TextOverflow.clip),
-                                  buildText(
-                                      'Тапсырмаларды оңай әрі жеңіл орындаңыз',
-                                      kBlackColor.withOpacity(.5),
-                                      textMedium,
-                                      FontWeight.normal,
-                                      TextAlign.center,
-                                      TextOverflow.clip),
-                                ],
-                              ),
-                            );
-                    }
-                    return Container();
-                  }))),
-          floatingActionButton: FloatingActionButton(
-            child: const Icon(
-              Icons.add_circle,
-              color: kPrimaryColor,
+                            ),
+                          );
+                  }
+                  return Container();
+                },
+              ),
             ),
-            onPressed: () {
-              Navigator.pushNamed(context, Pages.createNewTask);
-            },
           ),
+          // floatingActionButton: FloatingActionButton(
+          //   child: const Icon(
+          //     Icons.add_circle,
+          //     color: kPrimaryColor,
+          //   ),
+          //   onPressed: () {
+          //     Navigator.pushNamed(context, Pages.createNewTask);
+          //   },
+          // ),
         ),
       ),
     );
