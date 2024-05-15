@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sauap_planner/components/widgets.dart';
+import 'package:sauap_planner/screens/billing/model/billing.model.dart';
 import 'package:sauap_planner/tasks/data/local/model/task_model.dart';
 import 'package:sauap_planner/utils/font_sizes.dart';
 import 'package:sauap_planner/utils/util.dart';
@@ -21,6 +22,7 @@ class NewTaskScreen extends StatefulWidget {
 class _NewTaskScreenState extends State<NewTaskScreen> {
   TextEditingController title = TextEditingController();
   TextEditingController description = TextEditingController();
+  Charity? selectedCharity;
 
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
@@ -35,12 +37,14 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   }
 
   _onRangeSelected(DateTime? start, DateTime? end, DateTime focusDay) {
-    setState(() {
-      _selectedDay = null;
-      _focusedDay = focusDay;
-      _rangeStart = start;
-      _rangeEnd = end;
-    });
+    setState(
+      () {
+        _selectedDay = null;
+        _focusedDay = focusDay;
+        _rangeStart = start;
+        _rangeEnd = end;
+      },
+    );
   }
 
   @override
@@ -62,8 +66,12 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             child: BlocConsumer<TasksBloc, TasksState>(
               listener: (context, state) {
                 if (state is AddTaskFailure) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(getSnackBar(state.error, kRed));
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    getSnackBar(
+                      state.error,
+                      kRed,
+                    ),
+                  );
                 }
                 if (state is AddTasksSuccess) {
                   Navigator.pop(context);
@@ -92,9 +100,11 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       rangeEndDay: _rangeEnd,
                       onFormatChanged: (format) {
                         if (_calendarFormat != format) {
-                          setState(() {
-                            _calendarFormat = format;
-                          });
+                          setState(
+                            () {
+                              _calendarFormat = format;
+                            },
+                          );
                         }
                       },
                       onRangeSelected: _onRangeSelected,
@@ -104,9 +114,11 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       padding: const EdgeInsets.symmetric(
                           vertical: 10, horizontal: 20),
                       decoration: BoxDecoration(
-                          color: kPrimaryColor.withOpacity(.1),
-                          borderRadius:
-                              const BorderRadius.all(Radius.circular(5))),
+                        color: kPrimaryColor.withOpacity(.1),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(5),
+                        ),
+                      ),
                       child: buildText(
                           _rangeStart != null && _rangeEnd != null
                               ? 'Тапсырма ${formatDate(dateTime: _rangeStart.toString())} басталады - ${formatDate(dateTime: _rangeEnd.toString())} дейін'
@@ -138,44 +150,102 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       height: 10,
                     ),
                     BuildTextField(
-                        hint: "Тапсырма сипаттамасы",
-                        controller: description,
-                        inputType: TextInputType.multiline,
-                        fillColor: kWhiteColor,
-                        onChange: (value) {}),
+                      hint: """
+S — Specific — нақты;
+M — Measurable —өлшенетін;
+A — Achievable —қол жеткізуге болады;
+R — Relevant —маңызды;
+T —Time bound —уақытпен шектелген;""",
+                      controller: description,
+                      inputType: TextInputType.multiline,
+                      fillColor: kWhiteColor,
+                      onChange: (value) {},
+                    ),
                     const SizedBox(height: 20),
+                    DropdownButtonFormField<Charity>(
+                      value: selectedCharity,
+                      dropdownColor: Colors.white,
+                      decoration: const InputDecoration(
+                        filled: false,
+                        fillColor: kWhiteColor,
+                        hintText: 'Фондты таңдаңыз',
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 16,
+                          horizontal: 16,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide:
+                              BorderSide(width: 1, color: kPrimaryColor),
+                        ),
+                        disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: BorderSide(width: 0, color: kDarkPurple),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: BorderSide(width: 0, color: kGrey1),
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide: BorderSide(width: 0, color: kGrey1)),
+                        errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide: BorderSide(width: 1, color: kRed)),
+                        focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide: BorderSide(width: 1, color: kGrey1)),
+                        focusColor: kWhiteColor,
+                        hoverColor: kWhiteColor,
+                      ),
+                      onChanged: (Charity? newValue) {
+                        setState(() {
+                          selectedCharity = newValue;
+                        });
+                      },
+                      items: charityList.map((Charity charity) {
+                        return DropdownMenuItem<Charity>(
+                          value: charity,
+                          child: Text(charity.title),
+                        );
+                      }).toList(),
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
                     Row(
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                              style: ButtonStyle(
-                                foregroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        Colors.white),
-                                backgroundColor:
-                                    MaterialStateProperty.all<Color>(
-                                        kWhiteColor),
-                                shape: MaterialStateProperty.all<
-                                    RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(
-                                        10), // Adjust the radius as needed
-                                  ),
+                            style: ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all<Color>(
+                                  Colors.white),
+                              backgroundColor: MaterialStateProperty.all<Color>(
+                                kWhiteColor,
+                              ),
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(
+                                      10), // Adjust the radius as needed
                                 ),
                               ),
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(15),
-                                child: buildText(
-                                    'Кері қайту',
-                                    kBlackColor,
-                                    textMedium,
-                                    FontWeight.w600,
-                                    TextAlign.center,
-                                    TextOverflow.clip),
-                              )),
+                            ),
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(15),
+                              child: buildText(
+                                'Кері қайту',
+                                kBlackColor,
+                                textMedium,
+                                FontWeight.w600,
+                                TextAlign.center,
+                                TextOverflow.clip,
+                              ),
+                            ),
+                          ),
                         ),
                         const SizedBox(
                           width: 20,
@@ -205,19 +275,20 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                                   description: description.text,
                                   startDateTime: _rangeStart,
                                   stopDateTime: _rangeEnd);
-                              context
-                                  .read<TasksBloc>()
-                                  .add(AddNewTaskEvent(taskModel: taskModel));
+                              context.read<TasksBloc>().add(
+                                    AddNewTaskEvent(taskModel: taskModel),
+                                  );
                             },
                             child: Padding(
                               padding: const EdgeInsets.all(15),
                               child: buildText(
-                                  'Сақтау',
-                                  kWhiteColor,
-                                  textMedium,
-                                  FontWeight.w600,
-                                  TextAlign.center,
-                                  TextOverflow.clip),
+                                'Сақтау',
+                                kWhiteColor,
+                                textMedium,
+                                FontWeight.w600,
+                                TextAlign.center,
+                                TextOverflow.clip,
+                              ),
                             ),
                           ),
                         ),

@@ -18,17 +18,17 @@ class BuildTextField extends StatelessWidget {
 
   const BuildTextField(
       {super.key,
-        required this.hint,
-        this.controller,
-        required this.inputType,
-        this.prefixIcon,
-        this.suffixIcon,
-        this.obscureText = false,
-        this.enabled = true,
-        this.fillColor = kWhiteColor,
-        this.hintColor = kGrey1,
-        this.maxLength,
-        required this.onChange});
+      required this.hint,
+      this.controller,
+      required this.inputType,
+      this.prefixIcon,
+      this.suffixIcon,
+      this.obscureText = false,
+      this.enabled = true,
+      this.fillColor = kWhiteColor,
+      this.hintColor = kGrey1,
+      this.maxLength,
+      required this.onChange});
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +48,7 @@ class BuildTextField extends StatelessWidget {
         fillColor: fillColor,
         filled: true,
         contentPadding:
-        const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10),
+            const EdgeInsets.symmetric(vertical: 15.0, horizontal: 10),
         hintText: hint,
         floatingLabelBehavior: FloatingLabelBehavior.always,
         hintStyle: TextStyle(

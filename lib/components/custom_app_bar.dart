@@ -40,8 +40,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: actionWidgets,
       title: Row(
         children: [
-          buildText(title, kBlackColor, textMedium, FontWeight.w500,
-              TextAlign.start, TextOverflow.clip),
+          buildText(
+            title,
+            kBlackColor,
+            textExtraLarge,
+            FontWeight.w500,
+            TextAlign.start,
+            TextOverflow.clip,
+          ),
         ],
       ),
     );

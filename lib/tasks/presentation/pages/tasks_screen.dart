@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,10 +19,19 @@ class TasksScreen extends StatefulWidget {
 
   @override
   State<TasksScreen> createState() => _TasksScreenState();
+
+  int getTaskCount(BuildContext context) {
+    final state = context.read<TasksBloc>().state;
+    if (state is FetchTasksSuccess) {
+      return state.tasks.length;
+    }
+    return 0;
+  }
 }
 
 class _TasksScreenState extends State<TasksScreen> {
   TextEditingController searchController = TextEditingController();
+  final _user = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
@@ -40,7 +50,7 @@ class _TasksScreenState extends State<TasksScreen> {
         child: Scaffold(
           backgroundColor: kWhiteColor,
           appBar: CustomAppBar(
-            title: "Сіз тіркелмедіңіз",
+            title: _user != null ? '${_user.displayName}' : 'Сіз тіркелмедіңіз',
             showBackArrow: false,
             actionWidgets: [
               PopupMenuButton<int>(
@@ -109,12 +119,13 @@ class _TasksScreenState extends State<TasksScreen> {
                             width: 10,
                           ),
                           buildText(
-                              'Орындалған тапсырмалар',
-                              kBlackColor,
-                              textSmall,
-                              FontWeight.normal,
-                              TextAlign.start,
-                              TextOverflow.clip)
+                            'Орындалған тапсырмалар',
+                            kBlackColor,
+                            textSmall,
+                            FontWeight.normal,
+                            TextAlign.start,
+                            TextOverflow.clip,
+                          )
                         ],
                       ),
                     ),
@@ -130,12 +141,13 @@ class _TasksScreenState extends State<TasksScreen> {
                             width: 10,
                           ),
                           buildText(
-                              'Күтіп тұрған тапсырмалар',
-                              kBlackColor,
-                              textSmall,
-                              FontWeight.normal,
-                              TextAlign.start,
-                              TextOverflow.clip)
+                            'Күтіп тұрған тапсырмалар',
+                            kBlackColor,
+                            textSmall,
+                            FontWeight.normal,
+                            TextAlign.start,
+                            TextOverflow.clip,
+                          )
                         ],
                       ),
                     ),
@@ -161,7 +173,9 @@ class _TasksScreenState extends State<TasksScreen> {
                   }
 
                   if (state is AddTaskFailure || state is UpdateTaskFailure) {
-                    context.read<TasksBloc>().add(FetchTaskEvent());
+                    context.read<TasksBloc>().add(
+                          FetchTaskEvent(),
+                        );
                   }
                 },
                 builder: (context, state) {
@@ -174,12 +188,13 @@ class _TasksScreenState extends State<TasksScreen> {
                   if (state is LoadTaskFailure) {
                     return Center(
                       child: buildText(
-                          state.error,
-                          kBlackColor,
-                          textMedium,
-                          FontWeight.normal,
-                          TextAlign.center,
-                          TextOverflow.clip),
+                        state.error,
+                        kBlackColor,
+                        textMedium,
+                        FontWeight.normal,
+                        TextAlign.center,
+                        TextOverflow.clip,
+                      ),
                     );
                   }
 
@@ -188,7 +203,7 @@ class _TasksScreenState extends State<TasksScreen> {
                         ? Column(
                             children: [
                               BuildTextField(
-                                hint: "Search recent task",
+                                hint: "Іздеу",
                                 controller: searchController,
                                 inputType: TextInputType.text,
                                 prefixIcon: const Icon(

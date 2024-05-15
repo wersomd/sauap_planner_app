@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sauap_planner/components/snackbar.dart';
+import 'package:sauap_planner/routes/pages.dart';
 import 'package:sauap_planner/utils/color_palette.dart';
 
 class LoginPage extends StatefulWidget {
@@ -59,7 +60,8 @@ class _LoginPageState extends State<LoginPage> {
       }
     }
 
-    navigator.pushNamedAndRemoveUntil('/home', (Route<dynamic> route) => false);
+    navigator.pushNamedAndRemoveUntil(
+        Pages.wrapper, (Route<dynamic> route) => false);
   }
 
   @override
@@ -74,7 +76,7 @@ class _LoginPageState extends State<LoginPage> {
         systemOverlayStyle: SystemUiOverlayStyle.dark,
         leading: IconButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/home');
+            Navigator.pushNamed(context, Pages.wrapper);
           },
           icon: Icon(
             Icons.arrow_back_ios,
@@ -255,7 +257,8 @@ class _LoginPageState extends State<LoginPage> {
                           backgroundColor: Colors.transparent,
                           elevation: 0,
                         ),
-                        onPressed: () => Navigator.pushNamed(context, ''),
+                        onPressed: () =>
+                            Navigator.pushNamed(context, Pages.signup),
                         child: const Text(
                           "Тіркелу",
                           style: TextStyle(

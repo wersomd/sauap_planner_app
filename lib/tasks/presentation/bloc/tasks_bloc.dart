@@ -24,16 +24,17 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     emit(TasksLoading());
     try {
       if (event.taskModel.title.trim().isEmpty) {
-        return emit(AddTaskFailure(error: 'Task title cannot be blank'));
+        return emit(AddTaskFailure(error: 'Тапсырма атауы бос бола алмайды!'));
       }
       if (event.taskModel.description.trim().isEmpty) {
-        return emit(AddTaskFailure(error: 'Task description cannot be blank'));
+        return emit(
+            AddTaskFailure(error: 'Тапсырма сипаттамасы бос бола алмайды!'));
       }
       if (event.taskModel.startDateTime == null) {
-        return emit(AddTaskFailure(error: 'Missing task start date'));
+        return emit(AddTaskFailure(error: 'Бастаулы уақыты белгісіз!'));
       }
       if (event.taskModel.stopDateTime == null) {
-        return emit(AddTaskFailure(error: 'Missing task stop date'));
+        return emit(AddTaskFailure(error: 'Аяқталу уақыты белгісіз!'));
       }
       await taskRepository.createNewTask(event.taskModel);
       emit(AddTasksSuccess());
@@ -57,17 +58,18 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   _updateTask(UpdateTaskEvent event, Emitter<TasksState> emit) async {
     try {
       if (event.taskModel.title.trim().isEmpty) {
-        return emit(UpdateTaskFailure(error: 'Task title cannot be blank'));
+        return emit(
+            UpdateTaskFailure(error: 'Тапсырма атауы бос бола алмайды!'));
       }
       if (event.taskModel.description.trim().isEmpty) {
         return emit(
-            UpdateTaskFailure(error: 'Task description cannot be blank'));
+            UpdateTaskFailure(error: 'Тапсырма сипаттамасы бос бола алмайды!'));
       }
       if (event.taskModel.startDateTime == null) {
-        return emit(UpdateTaskFailure(error: 'Missing task start date'));
+        return emit(UpdateTaskFailure(error: 'Бастаулы уақыты белгісіз!'));
       }
       if (event.taskModel.stopDateTime == null) {
-        return emit(UpdateTaskFailure(error: 'Missing task stop date'));
+        return emit(UpdateTaskFailure(error: 'Аяқталу уақыты белгісіз!'));
       }
       emit(TasksLoading());
       final tasks = await taskRepository.updateTask(event.taskModel);

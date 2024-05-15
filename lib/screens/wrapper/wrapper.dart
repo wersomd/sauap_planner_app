@@ -1,8 +1,9 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:sauap_planner/routes/pages.dart';
-import 'package:sauap_planner/screens/page_not_found/page_not_found.dart';
+import 'package:sauap_planner/screens/billing/billing.dart';
+import 'package:sauap_planner/screens/calendar/calendar.dart';
+import 'package:sauap_planner/screens/profile/profile.dart';
 import 'package:sauap_planner/tasks/presentation/pages/tasks_screen.dart';
 import 'package:sauap_planner/utils/color_palette.dart';
 
@@ -25,9 +26,9 @@ class _WrapperState extends State<Wrapper> {
 
   final _pages = [
     const TasksScreen(),
-    const PageNotFound(),
-    const PageNotFound(),
-    const PageNotFound(),
+    const CalendarPage(),
+    const BillingPage(),
+    const ProfilePage(),
   ];
 
   void _onItemTapped(int index) {
@@ -55,7 +56,7 @@ class _WrapperState extends State<Wrapper> {
         backgroundColor: kPrimaryColor,
         elevation: 0,
         child: const Icon(
-          CupertinoIcons.add,
+          Icons.add,
           color: kWhiteColor,
           size: 40,
         ),
@@ -73,8 +74,8 @@ class _WrapperState extends State<Wrapper> {
         gapLocation: GapLocation.center,
         onTap: _onItemTapped,
         notchSmoothness: NotchSmoothness.verySmoothEdge,
-        activeColor: Colors.purple,
-        inactiveColor: Colors.black,
+        activeColor: kPrimaryColor,
+        inactiveColor: kBlackColor,
       ),
     );
   }

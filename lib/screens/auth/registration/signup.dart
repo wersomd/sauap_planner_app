@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:sauap_planner/components/snackbar.dart';
+import 'package:sauap_planner/routes/pages.dart';
 import 'package:sauap_planner/screens/auth/login/login.dart';
 import 'package:sauap_planner/utils/color_palette.dart';
 
@@ -83,7 +84,7 @@ class _SignUpPageState extends State<SignUpPage> {
         backgroundColor: Colors.transparent,
         leading: IconButton(
           onPressed: () {
-            Navigator.pushReplacementNamed(context, '/home');
+            Navigator.pushReplacementNamed(context, Pages.wrapper);
           },
           icon: const Icon(
             Icons.arrow_back_ios,
