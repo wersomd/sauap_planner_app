@@ -76,6 +76,7 @@ flutter:
     - assets/images/
     - assets/svgs/
     - assets/images/onboarding/
+    - assets/images/founds/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware
@@ -88,17 +89,27 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-#  fonts:
-#    - family: Sora
-#      fonts:
-#        - asset: assets/fonts/Sora-Light.ttf
-#        - asset: assets/fonts/Sora-Regular.ttf
-#        - asset: assets/fonts/Sora-Medium.ttf
-#          weight: 300
-#        - asset: assets/fonts/Sora-Bold.ttf
-#        - asset: assets/fonts/Sora-ExtraLight.ttf
-#        - asset: assets/fonts/Sora-ExtraBold.ttf
-#          weight: 700
+  fonts:
+    - family: SF Pro Display
+      fonts:
+        - asset: assets/fonts/SF-Pro-Display/SF-Pro-Display-Ultralight.otf
+          weight: 100
+        - asset: assets/fonts/SF-Pro-Display/SF-Pro-Display-Thin.otf
+          weight: 200
+        - asset: assets/fonts/SF-Pro-Display/SF-Pro-Display-Light.otf
+          weight: 300
+        - asset: assets/fonts/SF-Pro-Display/SF-Pro-Display-Regular.otf
+          weight: 400
+        - asset: assets/fonts/SF-Pro-Display/SF-Pro-Display-Medium.otf
+          weight: 500
+        - asset: assets/fonts/SF-Pro-Display/SF-Pro-Display-Semibold.otf
+          weight: 600
+        - asset: assets/fonts/SF-Pro-Display/SF-Pro-Display-Bold.otf
+          weight: 700
+        - asset: assets/fonts/SF-Pro-Display/SF-Pro-Display-Heavy.otf
+          weight: 800
+        - asset: assets/fonts/SF-Pro-Display/SF-Pro-Display-Black.otf
+          weight: 900
 #
 # For details regarding fonts from package dependencies,
 # see https://flutter.dev/custom-fonts/#from-packages

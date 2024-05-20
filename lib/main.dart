@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
           initialRoute: Pages.initial,
           onGenerateRoute: onGenerateRoute,
           theme: ThemeData(
-            fontFamily: 'Sora',
+            fontFamily: 'Poppins',
             visualDensity: VisualDensity.adaptivePlatformDensity,
             canvasColor: Colors.transparent,
             colorScheme: ColorScheme.fromSeed(seedColor: kPrimaryColor),

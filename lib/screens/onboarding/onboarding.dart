@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:sauap_planner/components/custom_button.dart';
 import 'package:sauap_planner/routes/pages.dart';
 import 'package:sauap_planner/screens/onboarding/model/onboarding.model.dart';
+import 'package:sauap_planner/utils/color_palette.dart';
+import 'package:sauap_planner/utils/font_sizes.dart';
 
 class Onboarding extends StatefulWidget {
   const Onboarding({super.key});
@@ -21,33 +24,39 @@ class _OnboardingState extends State<Onboarding> {
   int _currentPage = 0;
 
   AnimatedContainer _buildDots({
-    int? index,
+    required int index,
   }) {
     return AnimatedContainer(
       duration: const Duration(milliseconds: 200),
-      decoration: const BoxDecoration(
-        borderRadius: BorderRadius.all(
+      decoration: BoxDecoration(
+        border: const Border.fromBorderSide(
+          BorderSide(
+            color: kSecondColor,
+          ),
+        ),
+        borderRadius: const BorderRadius.all(
           Radius.circular(50),
         ),
-        color: Color(0xFF000000),
+        color: _currentPage == index ? kSecondColor : kTransparentColor,
       ),
       margin: const EdgeInsets.only(right: 5),
-      height: 10,
+      width: 12,
+      height: 12,
       curve: Curves.easeIn,
-      width: _currentPage == index ? 20 : 10,
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final isSmallScreen = size.width <= 550;
 
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
             Expanded(
-              flex: 4,
+              flex: 3,
               child: PageView.builder(
                 physics: const BouncingScrollPhysics(),
                 controller: _controller,
@@ -64,39 +73,51 @@ class _OnboardingState extends State<Onboarding> {
                     child: Column(
                       children: [
                         Container(
-                          height: 300,
+                          height: size.height * 0.35,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(30.0),
                             image: DecorationImage(
                               image: AssetImage(
                                 onboardingContents[i].image,
                               ),
-                              fit: BoxFit.contain,
+                              fit: BoxFit.scaleDown,
                             ),
                           ),
                         ),
                         SizedBox(
-                          height: (size.height >= 840) ? 40 : 20,
+                          height: size.height * 0.03,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(
+                            onboardingContents.length,
+                            (int index) => _buildDots(
+                              index: index,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: size.height * 0.03,
                         ),
                         Text(
                           onboardingContents[i].title,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontFamily: "JetBrains Mono",
-                            fontWeight: FontWeight.w600,
-                            fontSize: (size.width <= 550) ? 30 : 35,
+                            fontWeight: FontWeight.w500,
+                            fontSize: isSmallScreen ? 30 : 35,
+                            color: kDarkPurple,
                           ),
                         ),
                         SizedBox(
-                          height: (size.height >= 840) ? 40 : 20,
+                          height: size.height * 0.03,
                         ),
                         Text(
                           onboardingContents[i].subtitle,
                           textAlign: TextAlign.center,
                           style: TextStyle(
-                            fontFamily: "JetBrains Mono",
-                            fontWeight: FontWeight.w600,
-                            fontSize: (size.width <= 550) ? 24 : 28,
+                            fontWeight: FontWeight.w400,
+                            fontSize: isSmallScreen ? 18 : 20,
+                            color: kDarkPurple.withOpacity(.6),
                           ),
                         ),
                       ],
@@ -110,51 +131,54 @@ class _OnboardingState extends State<Onboarding> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      onboardingContents.length,
-                      (int index) => _buildDots(
-                        index: index,
-                      ),
-                    ),
-                  ),
                   _currentPage + 1 == onboardingContents.length
                       ? Padding(
                           padding: const EdgeInsets.all(30),
-                          child: ElevatedButton(
+                          child: CustomButton(
+                            width: size.width * 0.8,
+                            height: 55,
+                            borderRadius: BorderRadius.circular(24),
                             onPressed: () {
                               Navigator.pushNamed(context, Pages.wrapper);
                             },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Colors.black,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(50),
-                              ),
-                              padding: (size.width <= 550)
-                                  ? const EdgeInsets.symmetric(
-                                      horizontal: 100, vertical: 20)
-                                  : EdgeInsets.symmetric(
-                                      horizontal: size.width * 0.2,
-                                      vertical: 25),
-                              textStyle: TextStyle(
-                                  fontSize: (size.width <= 550) ? 13 : 17),
-                            ),
-                            child: Text(
-                              "Бастау".toUpperCase(),
-                              style: const TextStyle(
+                            child: const Text(
+                              "Бастау",
+                              style: TextStyle(
                                 color: Colors.white,
-                                letterSpacing: 1.3,
-                                fontWeight: FontWeight.bold,
+                                fontSize: 22,
+                                fontWeight: FontWeight.w500,
+                                letterSpacing: .8,
                               ),
                             ),
-                          ),
-                        )
+                          ))
                       : Padding(
                           padding: const EdgeInsets.all(30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
                             children: [
+                              CustomButton(
+                                width: size.width * 0.8,
+                                height: 55,
+                                borderRadius: BorderRadius.circular(24),
+                                onPressed: () {
+                                  _controller.nextPage(
+                                    duration: const Duration(milliseconds: 200),
+                                    curve: Curves.easeIn,
+                                  );
+                                },
+                                child: const Text(
+                                  "Келесі",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w500,
+                                    letterSpacing: .8,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 10,
+                              ),
                               TextButton(
                                 onPressed: () {
                                   _controller.jumpToPage(2);
@@ -163,48 +187,17 @@ class _OnboardingState extends State<Onboarding> {
                                   elevation: 0,
                                   textStyle: TextStyle(
                                     fontWeight: FontWeight.w600,
-                                    fontSize: (size.width <= 550) ? 13 : 17,
+                                    fontSize: isSmallScreen ? 13 : 17,
                                   ),
                                 ),
                                 child: Text(
                                   "Өткізу".toUpperCase(),
                                   style: const TextStyle(
                                     color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                              ElevatedButton(
-                                onPressed: () {
-                                  _controller.nextPage(
-                                    duration: const Duration(milliseconds: 200),
-                                    curve: Curves.easeIn,
-                                  );
-                                },
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.black,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(50),
-                                  ),
-                                  elevation: 0,
-                                  padding: (size.width <= 550)
-                                      ? const EdgeInsets.symmetric(
-                                          horizontal: 30,
-                                          vertical: 20,
-                                        )
-                                      : const EdgeInsets.symmetric(
-                                          horizontal: 30,
-                                          vertical: 25,
-                                        ),
-                                  textStyle: TextStyle(
-                                    fontSize: (size.width <= 550) ? 13 : 17,
-                                  ),
-                                ),
-                                child: Text(
-                                  "Келесі".toUpperCase(),
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    letterSpacing: 1.32,
+                                    fontSize: textMedium,
+                                    decoration: TextDecoration.underline,
+                                    decorationThickness: 1,
+                                    letterSpacing: 1.2,
                                   ),
                                 ),
                               ),

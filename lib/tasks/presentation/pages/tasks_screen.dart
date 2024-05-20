@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sauap_planner/components/build_text_field.dart';
 import 'package:sauap_planner/components/custom_app_bar.dart';
+import 'package:sauap_planner/tasks/data/local/model/task_model.dart';
 import 'package:sauap_planner/tasks/presentation/bloc/tasks_bloc.dart';
 import 'package:sauap_planner/tasks/presentation/widget/task_item_view.dart';
 import 'package:sauap_planner/utils/color_palette.dart';
@@ -26,6 +27,14 @@ class TasksScreen extends StatefulWidget {
       return state.tasks.length;
     }
     return 0;
+  }
+
+  List<TaskModel> getTasks(BuildContext context) {
+    final state = context.read<TasksBloc>().state;
+    if (state is FetchTasksSuccess) {
+      return state.tasks;
+    }
+    return [];
   }
 }
 
@@ -48,10 +57,11 @@ class _TasksScreenState extends State<TasksScreen> {
       ),
       child: ScaffoldMessenger(
         child: Scaffold(
-          backgroundColor: kWhiteColor,
+          backgroundColor: kScaffoldColor,
           appBar: CustomAppBar(
             title: _user != null ? '${_user.displayName}' : 'Сіз тіркелмедіңіз',
             showBackArrow: false,
+            backgroundColor: kTransparentColor,
             actionWidgets: [
               PopupMenuButton<int>(
                 shape: RoundedRectangleBorder(
@@ -225,8 +235,12 @@ class _TasksScreenState extends State<TasksScreen> {
                                   shrinkWrap: true,
                                   itemCount: state.tasks.length,
                                   itemBuilder: (context, index) {
+                                    final task = state.tasks[index];
+                                    final isOverdue = task.stopDateTime
+                                        ?.isBefore(DateTime.now());
                                     return TaskItemView(
                                       taskModel: state.tasks[index],
+                                      isOverdue: isOverdue!,
                                     );
                                   },
                                   separatorBuilder:
@@ -275,15 +289,6 @@ class _TasksScreenState extends State<TasksScreen> {
               ),
             ),
           ),
-          // floatingActionButton: FloatingActionButton(
-          //   child: const Icon(
-          //     Icons.add_circle,
-          //     color: kPrimaryColor,
-          //   ),
-          //   onPressed: () {
-          //     Navigator.pushNamed(context, Pages.createNewTask);
-          //   },
-          // ),
         ),
       ),
     );

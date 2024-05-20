@@ -11,7 +11,12 @@ import '../bloc/tasks_bloc.dart';
 
 class TaskItemView extends StatefulWidget {
   final TaskModel taskModel;
-  const TaskItemView({super.key, required this.taskModel});
+  final bool isOverdue;
+  const TaskItemView({
+    super.key,
+    required this.taskModel,
+    required this.isOverdue,
+  });
 
   @override
   State<TaskItemView> createState() => _TaskItemViewState();
@@ -21,8 +26,16 @@ class _TaskItemViewState extends State<TaskItemView> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 10),
-      padding: const EdgeInsets.all(0),
+      margin: const EdgeInsets.only(
+        bottom: 10,
+      ),
+      padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
+      decoration: BoxDecoration(
+        color: widget.isOverdue ? kRed : kWhiteColor,
+        borderRadius: const BorderRadius.all(
+          Radius.circular(16),
+        ),
+      ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -31,12 +44,13 @@ class _TaskItemViewState extends State<TaskItemView> {
             value: widget.taskModel.completed,
             onChanged: (value) {
               var taskModel = TaskModel(
-                  id: widget.taskModel.id,
-                  title: widget.taskModel.title,
-                  description: widget.taskModel.description,
-                  completed: !widget.taskModel.completed,
-                  startDateTime: widget.taskModel.startDateTime,
-                  stopDateTime: widget.taskModel.stopDateTime);
+                id: widget.taskModel.id,
+                title: widget.taskModel.title,
+                description: widget.taskModel.description,
+                completed: !widget.taskModel.completed,
+                startDateTime: widget.taskModel.startDateTime,
+                stopDateTime: widget.taskModel.stopDateTime,
+              );
               context.read<TasksBloc>().add(
                     UpdateTaskEvent(taskModel: taskModel),
                   );
@@ -52,7 +66,7 @@ class _TaskItemViewState extends State<TaskItemView> {
                     Expanded(
                       child: buildText(
                         widget.taskModel.title,
-                        kBlackColor,
+                        widget.isOverdue ? kWhiteColor : kBlackColor,
                         textMedium,
                         FontWeight.w500,
                         TextAlign.start,
@@ -68,23 +82,19 @@ class _TaskItemViewState extends State<TaskItemView> {
                       onSelected: (value) {
                         switch (value) {
                           case 0:
-                            {
-                              Navigator.pushNamed(
-                                context,
-                                Pages.updateTask,
-                                arguments: widget.taskModel,
-                              );
-                              break;
-                            }
+                            Navigator.pushNamed(
+                              context,
+                              Pages.updateTask,
+                              arguments: widget.taskModel,
+                            );
+                            break;
                           case 1:
-                            {
-                              context.read<TasksBloc>().add(
-                                    DeleteTaskEvent(
-                                      taskModel: widget.taskModel,
-                                    ),
-                                  );
-                              break;
-                            }
+                            context.read<TasksBloc>().add(
+                                  DeleteTaskEvent(
+                                    taskModel: widget.taskModel,
+                                  ),
+                                );
+                            break;
                         }
                       },
                       itemBuilder: (BuildContext context) {
@@ -101,12 +111,13 @@ class _TaskItemViewState extends State<TaskItemView> {
                                   width: 10,
                                 ),
                                 buildText(
-                                    'Өзгерту',
-                                    kBlackColor,
-                                    textMedium,
-                                    FontWeight.normal,
-                                    TextAlign.start,
-                                    TextOverflow.clip)
+                                  'Өзгерту',
+                                  kBlackColor,
+                                  textMedium,
+                                  FontWeight.normal,
+                                  TextAlign.start,
+                                  TextOverflow.clip,
+                                ),
                               ],
                             ),
                           ),
@@ -128,7 +139,7 @@ class _TaskItemViewState extends State<TaskItemView> {
                                   FontWeight.normal,
                                   TextAlign.start,
                                   TextOverflow.clip,
-                                )
+                                ),
                               ],
                             ),
                           ),
@@ -143,7 +154,7 @@ class _TaskItemViewState extends State<TaskItemView> {
                 ),
                 buildText(
                   widget.taskModel.description,
-                  kGrey1,
+                  widget.isOverdue ? kWhiteColor : kBlackColor,
                   textSmall,
                   FontWeight.normal,
                   TextAlign.start,
@@ -173,13 +184,13 @@ class _TaskItemViewState extends State<TaskItemView> {
                       Expanded(
                         child: buildText(
                           '${formatDate(dateTime: widget.taskModel.startDateTime.toString())} - ${formatDate(dateTime: widget.taskModel.stopDateTime.toString())}',
-                          kBlackColor,
+                          widget.isOverdue ? kWhiteColor : kBlackColor,
                           textTiny,
                           FontWeight.w400,
                           TextAlign.start,
                           TextOverflow.clip,
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),

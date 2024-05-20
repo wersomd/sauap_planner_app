@@ -120,14 +120,15 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                         ),
                       ),
                       child: buildText(
-                          _rangeStart != null && _rangeEnd != null
-                              ? 'Тапсырма ${formatDate(dateTime: _rangeStart.toString())} басталады - ${formatDate(dateTime: _rangeEnd.toString())} дейін'
-                              : 'Уақытты таңдаңыз',
-                          kPrimaryColor,
-                          textSmall,
-                          FontWeight.w400,
-                          TextAlign.start,
-                          TextOverflow.clip),
+                        _rangeStart != null && _rangeEnd != null
+                            ? 'Тапсырма ${formatDate(dateTime: _rangeStart.toString())} басталады - ${formatDate(dateTime: _rangeEnd.toString())} дейін'
+                            : 'Уақытты таңдаңыз',
+                        kPrimaryColor,
+                        textSmall,
+                        FontWeight.w400,
+                        TextAlign.start,
+                        TextOverflow.clip,
+                      ),
                     ),
                     const SizedBox(height: 20),
                     buildText('Атауы', kBlackColor, textMedium, FontWeight.bold,
@@ -144,8 +145,14 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                     const SizedBox(
                       height: 20,
                     ),
-                    buildText('Сипаттамасы', kBlackColor, textMedium,
-                        FontWeight.bold, TextAlign.start, TextOverflow.clip),
+                    buildText(
+                      'Сипаттамасы',
+                      kBlackColor,
+                      textMedium,
+                      FontWeight.bold,
+                      TextAlign.start,
+                      TextOverflow.clip,
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -218,12 +225,12 @@ T —Time bound —уақытпен шектелген;""",
                         Expanded(
                           child: ElevatedButton(
                             style: ButtonStyle(
-                              foregroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              backgroundColor: MaterialStateProperty.all<Color>(
+                              foregroundColor:
+                                  WidgetStateProperty.all<Color>(Colors.white),
+                              backgroundColor: WidgetStateProperty.all<Color>(
                                 kWhiteColor,
                               ),
-                              shape: MaterialStateProperty.all<
+                              shape: WidgetStateProperty.all<
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
@@ -253,11 +260,11 @@ T —Time bound —уақытпен шектелген;""",
                         Expanded(
                           child: ElevatedButton(
                             style: ButtonStyle(
-                              foregroundColor: MaterialStateProperty.all<Color>(
-                                  Colors.white),
-                              backgroundColor: MaterialStateProperty.all<Color>(
-                                  kPrimaryColor),
-                              shape: MaterialStateProperty.all<
+                              foregroundColor:
+                                  WidgetStateProperty.all<Color>(Colors.white),
+                              backgroundColor:
+                                  WidgetStateProperty.all<Color>(kPrimaryColor),
+                              shape: WidgetStateProperty.all<
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(

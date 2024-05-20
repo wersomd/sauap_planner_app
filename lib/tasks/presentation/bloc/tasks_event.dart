@@ -29,10 +29,8 @@ class DeleteTaskEvent extends TasksEvent {
   DeleteTaskEvent({required this.taskModel});
 }
 
-class SearchTaskEvent extends TasksEvent{
+class SearchTaskEvent extends TasksEvent {
   final String keywords;
 
   SearchTaskEvent({required this.keywords});
 }
-
-

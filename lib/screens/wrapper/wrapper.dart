@@ -51,31 +51,45 @@ class _WrapperState extends State<Wrapper> {
       backgroundColor: theme.scaffoldBackgroundColor,
       extendBody: true,
       body: _pages[_selectedIndex],
-      floatingActionButton: FloatingActionButton(
-        splashColor: kPrimaryColor,
-        backgroundColor: kPrimaryColor,
-        elevation: 0,
-        child: const Icon(
-          Icons.add,
-          color: kWhiteColor,
-          size: 40,
+      floatingActionButton: Container(
+        decoration: const BoxDecoration(
+          gradient: kDefaultGradient,
+          borderRadius: BorderRadius.all(
+            Radius.circular(30),
+          ),
         ),
-        onPressed: () {
-          Navigator.pushNamed(context, Pages.createNewTask);
-        },
+        child: FloatingActionButton(
+          splashColor: kPrimaryColor,
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          child: const Icon(
+            Icons.add,
+            color: kWhiteColor,
+            size: 40,
+          ),
+          onPressed: () {
+            Navigator.pushNamed(context, Pages.createNewTask);
+          },
+        ),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: AnimatedBottomNavigationBar(
+      bottomNavigationBar: AnimatedBottomNavigationBar.builder(
         borderColor: kGrey3,
-        icons: _iconList,
-        iconSize: 30,
         scaleFactor: .5,
         activeIndex: _selectedIndex,
         gapLocation: GapLocation.center,
         onTap: _onItemTapped,
         notchSmoothness: NotchSmoothness.verySmoothEdge,
-        activeColor: kPrimaryColor,
-        inactiveColor: kBlackColor,
+        itemCount: _pages.length,
+        tabBuilder: (int index, bool isActive) {
+          return Icon(
+            _iconList[index],
+            size: 30,
+            color: isActive ? kPrimaryColor : kBlackColor,
+          );
+        },
+        leftCornerRadius: 32,
+        rightCornerRadius: 32,
       ),
     );
   }

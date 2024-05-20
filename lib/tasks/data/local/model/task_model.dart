@@ -26,7 +26,6 @@ class TaskModel {
     };
   }
 
-
   factory TaskModel.fromJson(Map<String, dynamic> json) {
     return TaskModel(
       id: json['id'],

@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:sauap_planner/components/widgets.dart';
 import 'package:sauap_planner/routes/pages.dart';
 import 'package:sauap_planner/utils/color_palette.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -36,12 +37,36 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: kWhiteColor,
-      child: Column(
+    return Scaffold(
+      appBar: AppBar(
+        title: buildText(
+          'Профиль',
+          kBlackColor,
+          22,
+          FontWeight.w400,
+          TextAlign.center,
+          TextOverflow.clip,
+        ),
+        leading: const Icon(Icons.menu),
+        backgroundColor: kTransparentColor,
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.poll_outlined,
+                size: 30,
+              ),
+            ),
+          ),
+        ],
+      ),
+      backgroundColor: kScaffoldColor,
+      body: Column(
         children: [
           const SizedBox(
-            height: 100,
+            height: 20,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
