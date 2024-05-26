@@ -1,55 +1,57 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sauap_planner/components/widgets.dart';
 import 'package:sauap_planner/utils/color_palette.dart';
-import 'package:sauap_planner/utils/font_sizes.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final GlobalKey<ScaffoldState> scaffoldKey;
   final String title;
-  final Function? onBackTap;
-  final bool showBackArrow;
-  final Color? backgroundColor;
-  final List<Widget>? actionWidgets;
 
   const CustomAppBar(
-      {super.key,
-      required this.title,
-      this.onBackTap,
-      this.showBackArrow = true,
-      this.backgroundColor = kWhiteColor,
-      this.actionWidgets});
+      {super.key, required this.scaffoldKey, required this.title});
 
   @override
   Widget build(BuildContext context) {
-    return AppBar(
-      backgroundColor: backgroundColor,
-      automaticallyImplyLeading: false,
-      elevation: 0,
-      leading: showBackArrow
-          ? IconButton(
-              icon: SvgPicture.asset('assets/svgs/back_arrow.svg'),
-              onPressed: () {
-                if (onBackTap != null) {
-                  onBackTap!();
-                } else {
-                  Navigator.of(context).pop();
-                }
-              },
-            )
-          : null,
-      actions: actionWidgets,
-      title: Row(
-        children: [
-          buildText(
-            title,
-            kBlackColor,
-            textExtraLarge,
-            FontWeight.w500,
-            TextAlign.start,
-            TextOverflow.clip,
-          ),
-        ],
+    AlertDialog alert = const AlertDialog(
+      title: Text(
+        "Ескерту!",
+        textAlign: TextAlign.center,
       ),
+      content: Text(
+        """ Құрметті пайдаланушы! \n Тапсырма уақыты бітуде, сіз еңгізген сумма “Таңдалған қордың” қаражатына аударылады""",
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 18, color: kRed),
+      ),
+    );
+
+    return AppBar(
+      title: buildText(
+        title,
+        kBlackColor,
+        22,
+        FontWeight.w400,
+        TextAlign.center,
+        TextOverflow.clip,
+      ),
+      leading: IconButton(
+        icon: const Icon(Icons.menu),
+        onPressed: () => scaffoldKey.currentState!.openDrawer(),
+        tooltip: MaterialLocalizations.of(context).openAppDrawerTooltip,
+      ),
+      backgroundColor: kTransparentColor,
+      actions: [
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: IconButton(
+            onPressed: () {
+              showDialog(context: context, builder: (context) => alert);
+            },
+            icon: const Icon(
+              Icons.poll_outlined,
+              size: 30,
+            ),
+          ),
+        ),
+      ],
     );
   }
 

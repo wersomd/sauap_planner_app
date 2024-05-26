@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:sauap_planner/components/widgets.dart';
+import 'package:sauap_planner/components/custom_app_bar.dart';
+import 'package:sauap_planner/components/custom_menu.dart';
 import 'package:sauap_planner/routes/pages.dart';
 import 'package:sauap_planner/utils/color_palette.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -14,6 +15,8 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final _user = FirebaseAuth.instance.currentUser;
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   final Uri _charity =
       Uri.parse('https://egov.kz/cms/ru/articles/charity-foundation');
 
@@ -38,29 +41,11 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: buildText(
-          'Профиль',
-          kBlackColor,
-          22,
-          FontWeight.w400,
-          TextAlign.center,
-          TextOverflow.clip,
-        ),
-        leading: const Icon(Icons.menu),
-        backgroundColor: kTransparentColor,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.poll_outlined,
-                size: 30,
-              ),
-            ),
-          ),
-        ],
+      key: scaffoldKey,
+      drawer: const CustomMenu(),
+      appBar: CustomAppBar(
+        title: "Профиль",
+        scaffoldKey: scaffoldKey,
       ),
       backgroundColor: kScaffoldColor,
       body: Column(
@@ -84,7 +69,7 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
           ),
           const SizedBox(
-            height: 15,
+            height: 60,
           ),
           Expanded(
             child: ListView(
@@ -92,9 +77,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 Card(
                   margin:
                       const EdgeInsets.only(left: 35, right: 35, bottom: 10),
-                  color: kGrey3,
+                  color: kTransparentColor,
+                  elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(color: kPrimaryColor),
                   ),
                   child: const ListTile(
                     leading: Icon(
@@ -118,11 +105,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 10,
                 ),
                 Card(
-                  color: kGrey3,
                   margin:
                       const EdgeInsets.only(left: 35, right: 35, bottom: 10),
+                  color: kTransparentColor,
+                  elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(color: kPrimaryColor),
                   ),
                   child: const ListTile(
                     leading: Icon(Icons.help_outline, color: Colors.black54),
@@ -143,11 +132,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 10,
                 ),
                 Card(
-                  color: kGrey3,
                   margin:
                       const EdgeInsets.only(left: 35, right: 35, bottom: 10),
+                  color: kTransparentColor,
+                  elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(color: kPrimaryColor),
                   ),
                   child: ListTile(
                     leading: const Icon(
@@ -175,11 +166,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 10,
                 ),
                 Card(
-                  color: kGrey3,
                   margin:
                       const EdgeInsets.only(left: 35, right: 35, bottom: 10),
+                  color: kTransparentColor,
+                  elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(color: kPrimaryColor),
                   ),
                   child: const ListTile(
                     leading: Icon(
@@ -203,11 +196,13 @@ class _ProfilePageState extends State<ProfilePage> {
                   height: 10,
                 ),
                 Card(
-                  color: kGrey3,
                   margin:
                       const EdgeInsets.only(left: 35, right: 35, bottom: 10),
+                  color: kTransparentColor,
+                  elevation: 0,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(color: kPrimaryColor),
                   ),
                   child: ListTile(
                     leading: const Icon(

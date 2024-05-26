@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sauap_planner/components/build_text_field.dart';
 import 'package:sauap_planner/components/custom_app_bar.dart';
+import 'package:sauap_planner/components/custom_menu.dart';
 import 'package:sauap_planner/tasks/data/local/model/task_model.dart';
 import 'package:sauap_planner/tasks/presentation/bloc/tasks_bloc.dart';
 import 'package:sauap_planner/tasks/presentation/widget/task_item_view.dart';
@@ -40,7 +41,7 @@ class TasksScreen extends StatefulWidget {
 
 class _TasksScreenState extends State<TasksScreen> {
   TextEditingController searchController = TextEditingController();
-  final _user = FirebaseAuth.instance.currentUser;
+  // final _user = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
@@ -51,124 +52,20 @@ class _TasksScreenState extends State<TasksScreen> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
+        statusBarColor: kTransparentColor,
       ),
       child: ScaffoldMessenger(
         child: Scaffold(
+          key: scaffoldKey,
+          drawer: const CustomMenu(),
           backgroundColor: kScaffoldColor,
           appBar: CustomAppBar(
-            title: _user != null ? '${_user.displayName}' : 'Сіз тіркелмедіңіз',
-            showBackArrow: false,
-            backgroundColor: kTransparentColor,
-            actionWidgets: [
-              PopupMenuButton<int>(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                elevation: 1,
-                onSelected: (value) {
-                  switch (value) {
-                    case 0:
-                      {
-                        context
-                            .read<TasksBloc>()
-                            .add(SortTaskEvent(sortOption: 0));
-                        break;
-                      }
-                    case 1:
-                      {
-                        context
-                            .read<TasksBloc>()
-                            .add(SortTaskEvent(sortOption: 1));
-                        break;
-                      }
-                    case 2:
-                      {
-                        context
-                            .read<TasksBloc>()
-                            .add(SortTaskEvent(sortOption: 2));
-                        break;
-                      }
-                  }
-                },
-                itemBuilder: (BuildContext context) {
-                  return [
-                    PopupMenuItem<int>(
-                      value: 0,
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            'assets/svgs/calender.svg',
-                            width: 15,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          buildText(
-                            'Уақыт бойынша сорт',
-                            kBlackColor,
-                            textSmall,
-                            FontWeight.normal,
-                            TextAlign.start,
-                            TextOverflow.clip,
-                          )
-                        ],
-                      ),
-                    ),
-                    PopupMenuItem<int>(
-                      value: 1,
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            'assets/svgs/task_checked.svg',
-                            width: 15,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          buildText(
-                            'Орындалған тапсырмалар',
-                            kBlackColor,
-                            textSmall,
-                            FontWeight.normal,
-                            TextAlign.start,
-                            TextOverflow.clip,
-                          )
-                        ],
-                      ),
-                    ),
-                    PopupMenuItem<int>(
-                      value: 2,
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            'assets/svgs/task.svg',
-                            width: 15,
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          buildText(
-                            'Күтіп тұрған тапсырмалар',
-                            kBlackColor,
-                            textSmall,
-                            FontWeight.normal,
-                            TextAlign.start,
-                            TextOverflow.clip,
-                          )
-                        ],
-                      ),
-                    ),
-                  ];
-                },
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 20),
-                  child: SvgPicture.asset('assets/svgs/filter.svg'),
-                ),
-              ),
-            ],
+            title: "",
+            scaffoldKey: scaffoldKey,
           ),
           body: GestureDetector(
             behavior: HitTestBehavior.opaque,

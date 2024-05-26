@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,7 +8,7 @@ import 'package:sauap_planner/tasks/data/local/model/task_model.dart';
 import 'package:sauap_planner/utils/font_sizes.dart';
 import 'package:sauap_planner/utils/util.dart';
 import 'package:table_calendar/table_calendar.dart';
-import '../../../components/custom_app_bar.dart';
+import '../../../components/task_app_bar.dart';
 import '../../../utils/color_palette.dart';
 import '../bloc/tasks_bloc.dart';
 import '../../../components/build_text_field.dart';
@@ -22,6 +23,8 @@ class NewTaskScreen extends StatefulWidget {
 class _NewTaskScreenState extends State<NewTaskScreen> {
   TextEditingController title = TextEditingController();
   TextEditingController description = TextEditingController();
+  TextEditingController sum = TextEditingController();
+
   Charity? selectedCharity;
 
   CalendarFormat _calendarFormat = CalendarFormat.month;
@@ -55,7 +58,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       ),
       child: Scaffold(
         backgroundColor: kWhiteColor,
-        appBar: const CustomAppBar(
+        appBar: const TaskAppBar(
           title: 'Жаңа тапсырма қосу',
         ),
         body: GestureDetector(
@@ -170,12 +173,13 @@ T —Time bound —уақытпен шектелген;""",
                     ),
                     const SizedBox(height: 20),
                     DropdownButtonFormField<Charity>(
+                      elevation: 1,
                       value: selectedCharity,
                       dropdownColor: Colors.white,
                       decoration: const InputDecoration(
                         filled: false,
                         fillColor: kWhiteColor,
-                        hintText: 'Фондты таңдаңыз',
+                        hintText: "Фондты таңдаңыз",
                         contentPadding: EdgeInsets.symmetric(
                           vertical: 16,
                           horizontal: 16,
@@ -217,6 +221,15 @@ T —Time bound —уақытпен шектелген;""",
                         );
                       }).toList(),
                     ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    BuildTextField(
+                        hint: "Сумманы жазыңыз",
+                        controller: sum,
+                        inputType: TextInputType.number,
+                        fillColor: kWhiteColor,
+                        onChange: (value) {}),
                     const SizedBox(
                       height: 40,
                     ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:sauap_planner/components/custom_app_bar.dart';
+import 'package:sauap_planner/components/custom_menu.dart';
 import 'package:sauap_planner/components/widgets.dart';
 import 'package:sauap_planner/tasks/presentation/pages/tasks_screen.dart';
 import 'package:sauap_planner/utils/color_palette.dart';
@@ -18,6 +20,8 @@ class _CalendarPageState extends State<CalendarPage> {
   DateTime? _selectedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
+
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void initState() {
@@ -41,30 +45,12 @@ class _CalendarPageState extends State<CalendarPage> {
     final taskCount = tasks.length;
 
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: kScaffoldColor,
-      appBar: AppBar(
-        title: buildText(
-          DateFormat.MMMM("kk_KK").format(DateTime.now()),
-          kBlackColor,
-          22,
-          FontWeight.w400,
-          TextAlign.center,
-          TextOverflow.clip,
-        ),
-        leading: const Icon(Icons.menu),
-        backgroundColor: kTransparentColor,
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.poll_outlined,
-                size: 30,
-              ),
-            ),
-          ),
-        ],
+      drawer: const CustomMenu(),
+      appBar: CustomAppBar(
+        title: DateFormat.MMMM("kk_KK").format(DateTime.now()),
+        scaffoldKey: scaffoldKey,
       ),
       body: Padding(
         padding: const EdgeInsets.only(left: 5, right: 5),

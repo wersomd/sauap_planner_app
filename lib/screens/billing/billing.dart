@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:sauap_planner/components/custom_app_bar.dart';
+import 'package:sauap_planner/components/custom_menu.dart';
 import 'package:sauap_planner/components/widgets.dart';
 import 'package:sauap_planner/screens/billing/model/billing.model.dart';
 import 'package:sauap_planner/utils/color_palette.dart';
@@ -12,12 +14,14 @@ class BillingPage extends StatefulWidget {
 }
 
 class _BillingPageState extends State<BillingPage> {
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+
   Future<void> _launchURL(String url) async {
     final uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
+      ScaffoldMessenger.of(context.mounted as BuildContext).showSnackBar(
         const SnackBar(content: Text('Could not launch URL')),
       );
     }
@@ -27,22 +31,11 @@ class _BillingPageState extends State<BillingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kScaffoldColor,
-      appBar: AppBar(
-        backgroundColor: kTransparentColor,
-        title: const Text('Фондтар'),
-        leading: const Icon(Icons.menu),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.poll_outlined,
-                size: 30,
-              ),
-            ),
-          ),
-        ],
+      key: scaffoldKey,
+      drawer: const CustomMenu(),
+      appBar: CustomAppBar(
+        title: "Фондтар",
+        scaffoldKey: scaffoldKey,
       ),
       body: ListView.separated(
         separatorBuilder: (context, index) => const Divider(

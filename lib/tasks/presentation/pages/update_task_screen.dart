@@ -6,7 +6,7 @@ import 'package:sauap_planner/tasks/data/local/model/task_model.dart';
 import 'package:sauap_planner/utils/font_sizes.dart';
 import 'package:table_calendar/table_calendar.dart';
 
-import '../../../components/custom_app_bar.dart';
+import '../../../components/task_app_bar.dart';
 import '../../../utils/color_palette.dart';
 import '../../../utils/util.dart';
 import '../bloc/tasks_bloc.dart';
@@ -66,7 +66,7 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
         ),
         child: Scaffold(
             backgroundColor: kWhiteColor,
-            appBar: const CustomAppBar(
+            appBar: const TaskAppBar(
               title: 'Update Task',
             ),
             body: GestureDetector(
