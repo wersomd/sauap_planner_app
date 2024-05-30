@@ -55,6 +55,8 @@ PODS:
     - GoogleUtilities/Logger
     - GoogleUtilities/Privacy
   - GTMSessionFetcher/Core (3.4.1)
+  - image_picker_ios (0.0.1):
+    - Flutter
   - nb_utils (0.0.1):
     - Flutter
   - PromisesObjC (2.4.0)
@@ -73,6 +75,7 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
+  - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - nb_utils (from `.symlinks/plugins/nb_utils/ios`)
   - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
   - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
@@ -102,6 +105,8 @@ EXTERNAL SOURCES:
     :path: Flutter
   fluttertoast:
     :path: ".symlinks/plugins/fluttertoast/ios"
+  image_picker_ios:
+    :path: ".symlinks/plugins/image_picker_ios/ios"
   nb_utils:
     :path: ".symlinks/plugins/nb_utils/ios"
   shared_preferences_foundation:
@@ -122,6 +127,7 @@ SPEC CHECKSUMS:
   fluttertoast: 9f2f8e81bb5ce18facb9748d7855bf5a756fe3db
   GoogleUtilities: ea963c370a38a8069cc5f7ba4ca849a60b6d7d15
   GTMSessionFetcher: 8000756fc1c19d2e5697b90311f7832d2e33f6cd
+  image_picker_ios: c560581cceedb403a6ff17f2f816d7fea1421fc1
   nb_utils: ada4338858d8827ec92fdab2a545206b4ba4cfb1
   PromisesObjC: f5707f49cb48b9636751c5b2e7d227e43fba9f47
   ReachabilitySwift: 2128f3a8c9107e1ad33574c6e58e8285d460b149

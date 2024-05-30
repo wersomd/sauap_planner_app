@@ -46,7 +46,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               showDialog(context: context, builder: (context) => alert);
             },
             icon: const Icon(
-              Icons.poll_outlined,
+              Icons.light_mode_outlined,
               size: 30,
             ),
           ),

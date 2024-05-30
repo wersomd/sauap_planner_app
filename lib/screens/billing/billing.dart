@@ -46,6 +46,7 @@ class _BillingPageState extends State<BillingPage> {
         itemBuilder: (context, index) {
           final charity = charityList[index];
           return ListTile(
+            onTap: () => _launchURL(charity.link),
             leading: Container(
               decoration: const BoxDecoration(
                 borderRadius: BorderRadius.all(
@@ -69,14 +70,13 @@ class _BillingPageState extends State<BillingPage> {
             title: buildText(
               charity.title,
               kBlackColor,
-              15,
+              16,
               FontWeight.w400,
               TextAlign.left,
               TextOverflow.clip,
             ),
-            trailing: IconButton(
-              icon: const Icon(Icons.keyboard_arrow_right),
-              onPressed: () => _launchURL(charity.link),
+            trailing: const Icon(
+              Icons.keyboard_arrow_right,
             ),
           );
         },

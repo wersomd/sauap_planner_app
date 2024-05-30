@@ -23,7 +23,9 @@ Route onGenerateRoute(RouteSettings routeSettings) {
       );
     case Pages.wrapper:
       return MaterialPageRoute(
-        builder: (context) => const Wrapper(),
+        builder: (context) => Wrapper(
+          selectedIndex: 0,
+        ),
       );
     case Pages.home:
       return MaterialPageRoute(

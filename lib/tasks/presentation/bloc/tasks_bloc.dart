@@ -30,11 +30,17 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         return emit(
             AddTaskFailure(error: 'Тапсырма сипаттамасы бос бола алмайды!'));
       }
+      if (event.taskModel.charity.trim().isEmpty) {
+        return emit(UpdateTaskFailure(error: 'Фондты таңдаңыз!'));
+      }
       if (event.taskModel.startDateTime == null) {
         return emit(AddTaskFailure(error: 'Бастаулы уақыты белгісіз!'));
       }
       if (event.taskModel.stopDateTime == null) {
         return emit(AddTaskFailure(error: 'Аяқталу уақыты белгісіз!'));
+      }
+      if (event.taskModel.sum.trim().isEmpty) {
+        return emit(UpdateTaskFailure(error: 'Сумманы жазыңыз!'));
       }
       await taskRepository.createNewTask(event.taskModel);
       emit(AddTasksSuccess());
@@ -65,11 +71,17 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         return emit(
             UpdateTaskFailure(error: 'Тапсырма сипаттамасы бос бола алмайды!'));
       }
+      if (event.taskModel.charity.trim().isEmpty) {
+        return emit(UpdateTaskFailure(error: 'Фондты таңдаңыз!'));
+      }
       if (event.taskModel.startDateTime == null) {
         return emit(UpdateTaskFailure(error: 'Бастаулы уақыты белгісіз!'));
       }
       if (event.taskModel.stopDateTime == null) {
         return emit(UpdateTaskFailure(error: 'Аяқталу уақыты белгісіз!'));
+      }
+      if (event.taskModel.sum.trim().isEmpty) {
+        return emit(UpdateTaskFailure(error: 'Сумманы жазыңыз!'));
       }
       emit(TasksLoading());
       final tasks = await taskRepository.updateTask(event.taskModel);

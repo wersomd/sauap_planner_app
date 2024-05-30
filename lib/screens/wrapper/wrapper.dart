@@ -1,14 +1,15 @@
 import 'package:animated_bottom_navigation_bar/animated_bottom_navigation_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:sauap_planner/components/bottom_tabs.dart';
 import 'package:sauap_planner/routes/pages.dart';
-import 'package:sauap_planner/screens/billing/billing.dart';
-import 'package:sauap_planner/screens/calendar/calendar.dart';
-import 'package:sauap_planner/screens/profile/profile.dart';
-import 'package:sauap_planner/tasks/presentation/pages/tasks_screen.dart';
+
 import 'package:sauap_planner/utils/color_palette.dart';
 
+// ignore: must_be_immutable
 class Wrapper extends StatefulWidget {
-  const Wrapper({super.key});
+  int selectedIndex = 0;
+
+  Wrapper({super.key, required this.selectedIndex});
 
   @override
   State<Wrapper> createState() => _WrapperState();
@@ -24,22 +25,16 @@ class _WrapperState extends State<Wrapper> {
     Icons.person_2_outlined,
   ];
 
-  final _pages = [
-    const TasksScreen(),
-    const CalendarPage(),
-    const BillingPage(),
-    const ProfilePage(),
-  ];
-
   void _onItemTapped(int index) {
     setState(() {
-      _selectedIndex = index;
+      widget.selectedIndex = index;
+      _selectedIndex = widget.selectedIndex;
     });
   }
 
   @override
   void initState() {
-    _onItemTapped(_selectedIndex);
+    _onItemTapped(widget.selectedIndex);
     super.initState();
   }
 
@@ -49,8 +44,13 @@ class _WrapperState extends State<Wrapper> {
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      extendBody: true,
-      body: _pages[_selectedIndex],
+      extendBody: false,
+      body: IndexedStack(
+        index: widget.selectedIndex,
+        children: [
+          for (final tabItem in TabNavigationItem.items) tabItem.page,
+        ],
+      ),
       floatingActionButton: Container(
         decoration: const BoxDecoration(
           gradient: kDefaultGradient,
@@ -60,7 +60,7 @@ class _WrapperState extends State<Wrapper> {
         ),
         child: FloatingActionButton(
           splashColor: kPrimaryColor,
-          backgroundColor: Colors.transparent,
+          backgroundColor: kTransparentColor,
           elevation: 0,
           child: const Icon(
             Icons.add,
@@ -74,22 +74,23 @@ class _WrapperState extends State<Wrapper> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: AnimatedBottomNavigationBar.builder(
-        borderColor: kGrey3,
-        scaleFactor: .5,
+        backgroundColor: kPrimaryColor,
+        elevation: 0,
+        itemCount: _iconList.length,
         activeIndex: _selectedIndex,
-        gapLocation: GapLocation.center,
-        onTap: _onItemTapped,
-        notchSmoothness: NotchSmoothness.verySmoothEdge,
-        itemCount: _pages.length,
+        borderColor: kGrey3,
         tabBuilder: (int index, bool isActive) {
           return Icon(
             _iconList[index],
             size: 30,
-            color: isActive ? kPrimaryColor : kBlackColor,
+            color: isActive ? kWhiteColor : kGrey2,
           );
         },
-        leftCornerRadius: 32,
-        rightCornerRadius: 32,
+        onTap: _onItemTapped,
+        leftCornerRadius: 3,
+        rightCornerRadius: 3,
+        gapLocation: GapLocation.center,
+        notchSmoothness: NotchSmoothness.verySmoothEdge,
       ),
     );
   }

@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sauap_planner/components/widgets.dart';
-import 'package:sauap_planner/screens/billing/model/billing.model.dart';
 import 'package:sauap_planner/tasks/data/local/model/task_model.dart';
 import 'package:sauap_planner/utils/font_sizes.dart';
 import 'package:sauap_planner/utils/util.dart';
@@ -25,13 +23,27 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   TextEditingController description = TextEditingController();
   TextEditingController sum = TextEditingController();
 
-  Charity? selectedCharity;
-
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
+
+  final charityList = [
+    "ОФ Biz Birgemiz Qazaqstan",
+    "Фонд Асар-Уме",
+    "Фонд Харекет",
+    "ОФ БІЛІМ - ҚАЗЫНА",
+    "Фонд Шұғыла",
+    "Дом мамы АНА ҮЙІ",
+    "Нұр Мүбәрәк",
+    "Фонд Батыр Боламын",
+    "Rizyq Found",
+    "ОФ Өмір сыйла",
+    "Фонд Человек в маске",
+  ];
+
+  String selectedCharity = '';
 
   @override
   void initState() {
@@ -65,7 +77,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
           behavior: HitTestBehavior.opaque,
           onTap: () => FocusScope.of(context).unfocus(),
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(16),
             child: BlocConsumer<TasksBloc, TasksState>(
               listener: (context, state) {
                 if (state is AddTaskFailure) {
@@ -172,54 +184,20 @@ T —Time bound —уақытпен шектелген;""",
                       onChange: (value) {},
                     ),
                     const SizedBox(height: 20),
-                    DropdownButtonFormField<Charity>(
-                      elevation: 1,
-                      value: selectedCharity,
-                      dropdownColor: Colors.white,
-                      decoration: const InputDecoration(
-                        filled: false,
-                        fillColor: kWhiteColor,
-                        hintText: "Фондты таңдаңыз",
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 16,
-                          horizontal: 16,
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          borderSide:
-                              BorderSide(width: 1, color: kPrimaryColor),
-                        ),
-                        disabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          borderSide: BorderSide(width: 0, color: kDarkPurple),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(5)),
-                          borderSide: BorderSide(width: 0, color: kGrey1),
-                        ),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide: BorderSide(width: 0, color: kGrey1)),
-                        errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide: BorderSide(width: 1, color: kRed)),
-                        focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide: BorderSide(width: 1, color: kGrey1)),
-                        focusColor: kWhiteColor,
-                        hoverColor: kWhiteColor,
-                      ),
-                      onChanged: (Charity? newValue) {
-                        setState(() {
-                          selectedCharity = newValue;
-                        });
-                      },
-                      items: charityList.map((Charity charity) {
-                        return DropdownMenuItem<Charity>(
-                          value: charity,
-                          child: Text(charity.title),
+                    DropdownButtonFormField<String>(
+                      items: charityList.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
                         );
                       }).toList(),
+                      onChanged: (String? newValue) {
+                        setState(
+                          () {
+                            selectedCharity = newValue!;
+                          },
+                        );
+                      },
                     ),
                     const SizedBox(
                       height: 20,
@@ -247,7 +225,8 @@ T —Time bound —уақытпен шектелген;""",
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(
-                                      10), // Adjust the radius as needed
+                                    10,
+                                  ),
                                 ),
                               ),
                             ),
@@ -280,8 +259,7 @@ T —Time bound —уақытпен шектелген;""",
                               shape: WidgetStateProperty.all<
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                      10), // Adjust the radius as needed
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
                             ),
@@ -290,11 +268,15 @@ T —Time bound —уақытпен шектелген;""",
                                   .millisecondsSinceEpoch
                                   .toString();
                               var taskModel = TaskModel(
-                                  id: taskId,
-                                  title: title.text,
-                                  description: description.text,
-                                  startDateTime: _rangeStart,
-                                  stopDateTime: _rangeEnd);
+                                id: taskId,
+                                title: title.text,
+                                description: description.text,
+                                charity: selectedCharity,
+                                sum: sum.text,
+                                startDateTime: _rangeStart,
+                                stopDateTime: _rangeEnd,
+                              );
+
                               context.read<TasksBloc>().add(
                                     AddNewTaskEvent(taskModel: taskModel),
                                   );

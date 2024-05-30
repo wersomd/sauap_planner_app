@@ -31,7 +31,7 @@ class _TaskItemViewState extends State<TaskItemView> {
       ),
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
       decoration: BoxDecoration(
-        color: widget.isOverdue ? kRed : kWhiteColor,
+        color: widget.isOverdue ? kGrey0 : kWhiteColor,
         borderRadius: const BorderRadius.all(
           Radius.circular(16),
         ),
@@ -47,7 +47,9 @@ class _TaskItemViewState extends State<TaskItemView> {
                 id: widget.taskModel.id,
                 title: widget.taskModel.title,
                 description: widget.taskModel.description,
-                completed: !widget.taskModel.completed,
+                charity: widget.taskModel.charity,
+                sum: widget.taskModel.sum,
+                completed: widget.taskModel.completed,
                 startDateTime: widget.taskModel.startDateTime,
                 stopDateTime: widget.taskModel.stopDateTime,
               );

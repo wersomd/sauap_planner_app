@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:sauap_planner/components/custom_app_bar.dart';
 import 'package:sauap_planner/components/custom_menu.dart';
 import 'package:sauap_planner/routes/pages.dart';
@@ -16,9 +19,13 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final _user = FirebaseAuth.instance.currentUser;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
+  File? _image;
+  final imagePicker = ImagePicker();
 
   final Uri _charity =
       Uri.parse('https://egov.kz/cms/ru/articles/charity-foundation');
+
+  final Uri _whatsappLink = Uri.parse('https://wa.me/+77083169375');
 
   void _signIn() {
     Navigator.pushReplacementNamed(context, Pages.login);
@@ -63,7 +70,9 @@ class _ProfilePageState extends State<ProfilePage> {
                   padding: const EdgeInsets.all(
                     30.0,
                   ),
-                  child: Image.asset('assets/images/profile.png'),
+                  child: _image == null
+                      ? Image.asset('assets/images/profile.png')
+                      : Image.file(_image!),
                 ),
               ),
             ],
@@ -85,11 +94,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                   child: const ListTile(
                     leading: Icon(
-                      Icons.privacy_tip_sharp,
+                      Icons.photo,
                       color: Colors.black54,
                     ),
                     title: Text(
-                      'Ережелер',
+                      'Суретті ауыстыру',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.normal,
@@ -113,16 +122,20 @@ class _ProfilePageState extends State<ProfilePage> {
                     borderRadius: BorderRadius.circular(30),
                     side: const BorderSide(color: kPrimaryColor),
                   ),
-                  child: const ListTile(
-                    leading: Icon(Icons.help_outline, color: Colors.black54),
-                    title: Text(
+                  child: ListTile(
+                    onTap: () async {
+                      launchUrl(_whatsappLink);
+                    },
+                    leading:
+                        const Icon(Icons.help_outline, color: Colors.black54),
+                    title: const Text(
                       'Қолдау көрсету',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.normal,
                       ),
                     ),
-                    trailing: Icon(
+                    trailing: const Icon(
                       Icons.arrow_forward_ios_outlined,
                       color: Colors.black54,
                     ),

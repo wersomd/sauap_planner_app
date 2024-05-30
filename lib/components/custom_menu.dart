@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:sauap_planner/components/widgets.dart';
+import 'package:sauap_planner/screens/wrapper/wrapper.dart';
 import 'package:sauap_planner/utils/color_palette.dart';
 
 class CustomMenu extends StatelessWidget {
@@ -42,7 +43,14 @@ class CustomMenu extends StatelessWidget {
               color: kPrimaryColor,
             ),
             title: const Text("Басты бет"),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Wrapper(selectedIndex: 0),
+                ),
+              );
+            },
           ),
           ListTile(
             leading: const Icon(
@@ -50,7 +58,14 @@ class CustomMenu extends StatelessWidget {
               color: kPrimaryColor,
             ),
             title: const Text("Күнтізбе"),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Wrapper(selectedIndex: 1),
+                ),
+              );
+            },
           ),
           ListTile(
             leading: const Icon(
@@ -58,7 +73,14 @@ class CustomMenu extends StatelessWidget {
               color: kPrimaryColor,
             ),
             title: const Text("Фондтар"),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Wrapper(selectedIndex: 2),
+                ),
+              );
+            },
           ),
           ListTile(
             leading: const Icon(
@@ -66,7 +88,14 @@ class CustomMenu extends StatelessWidget {
               color: kPrimaryColor,
             ),
             title: const Text("Жеке кабинет"),
-            onTap: () {},
+            onTap: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Wrapper(selectedIndex: 3),
+                ),
+              );
+            },
           ),
         ],
       ),

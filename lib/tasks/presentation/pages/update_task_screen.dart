@@ -24,12 +24,29 @@ class UpdateTaskScreen extends StatefulWidget {
 class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
   TextEditingController title = TextEditingController();
   TextEditingController description = TextEditingController();
+  TextEditingController sum = TextEditingController();
 
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
+
+  final charityList = [
+    "ОФ Biz Birgemiz Qazaqstan",
+    "Фонд Асар-Уме",
+    "Фонд Харекет",
+    "ОФ БІЛІМ - ҚАЗЫНА",
+    "Фонд Шұғыла",
+    "Дом мамы АНА ҮЙІ",
+    "Нұр Мүбәрәк",
+    "Фонд Батыр Боламын",
+    "Rizyq Found",
+    "ОФ Өмір сыйла",
+    "Фонд Человек в маске",
+  ];
+
+  String selectedCharity = '';
 
   _onRangeSelected(DateTime? start, DateTime? end, DateTime focusDay) {
     setState(() {
@@ -44,6 +61,7 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
   void dispose() {
     title.dispose();
     description.dispose();
+    sum.dispose();
     super.dispose();
   }
 
@@ -51,6 +69,8 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
   void initState() {
     title.text = widget.taskModel.title;
     description.text = widget.taskModel.description;
+    sum.text = widget.taskModel.sum;
+    selectedCharity = widget.taskModel.charity;
     _selectedDay = _focusedDay;
     _rangeStart = widget.taskModel.startDateTime;
     _rangeEnd = widget.taskModel.stopDateTime;
@@ -61,154 +81,176 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
     return AnnotatedRegion<SystemUiOverlayStyle>(
-        value: const SystemUiOverlayStyle(
-          statusBarColor: Colors.transparent,
+      value: const SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+      ),
+      child: Scaffold(
+        backgroundColor: kWhiteColor,
+        appBar: const TaskAppBar(
+          title: 'Тапсырманы жаңарту',
         ),
-        child: Scaffold(
-            backgroundColor: kWhiteColor,
-            appBar: const TaskAppBar(
-              title: 'Update Task',
+        body: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: () => FocusScope.of(context).unfocus(),
+          child: Padding(
+            padding: const EdgeInsets.all(20),
+            child: BlocConsumer<TasksBloc, TasksState>(
+              listener: (context, state) {
+                if (state is UpdateTaskFailure) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(getSnackBar(state.error, kRed));
+                }
+                if (state is UpdateTaskSuccess) {
+                  Navigator.pop(context);
+                }
+              },
+              builder: (context, state) {
+                return ListView(
+                  children: [
+                    TableCalendar(
+                      calendarFormat: _calendarFormat,
+                      startingDayOfWeek: StartingDayOfWeek.monday,
+                      availableCalendarFormats: const {
+                        CalendarFormat.month: 'Ай',
+                        CalendarFormat.week: 'Апта',
+                      },
+                      rangeSelectionMode: RangeSelectionMode.toggledOn,
+                      focusedDay: _focusedDay,
+                      firstDay: DateTime.utc(2023, 1, 1),
+                      lastDay: DateTime.utc(2030, 1, 1),
+                      onPageChanged: (focusDay) {
+                        _focusedDay = focusDay;
+                      },
+                      selectedDayPredicate: (day) =>
+                          isSameDay(_selectedDay, day),
+                      rangeStartDay: _rangeStart,
+                      rangeEndDay: _rangeEnd,
+                      onFormatChanged: (format) {
+                        if (_calendarFormat != format) {
+                          setState(() {
+                            _calendarFormat = format;
+                          });
+                        }
+                      },
+                      onRangeSelected: _onRangeSelected,
+                    ),
+                    const SizedBox(height: 20),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 20),
+                      decoration: BoxDecoration(
+                          color: kPrimaryColor.withOpacity(.1),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(5))),
+                      child: buildText(
+                          _rangeStart != null && _rangeEnd != null
+                              ? 'Тапсырма ${formatDate(dateTime: _rangeStart.toString())} - ${formatDate(dateTime: _rangeEnd.toString())}'
+                              : 'Уақытты таңдаңыз',
+                          kPrimaryColor,
+                          textSmall,
+                          FontWeight.w400,
+                          TextAlign.start,
+                          TextOverflow.clip),
+                    ),
+                    const SizedBox(height: 20),
+                    buildText('Атауы', kBlackColor, textMedium, FontWeight.bold,
+                        TextAlign.start, TextOverflow.clip),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    BuildTextField(
+                        hint: "Атауы",
+                        controller: title,
+                        inputType: TextInputType.text,
+                        fillColor: kWhiteColor,
+                        onChange: (value) {}),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    buildText('Сипаттамасы', kBlackColor, textMedium,
+                        FontWeight.bold, TextAlign.start, TextOverflow.clip),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    BuildTextField(
+                        hint: "Тапсырма сипаттамасы",
+                        controller: description,
+                        inputType: TextInputType.multiline,
+                        fillColor: kWhiteColor,
+                        onChange: (value) {}),
+                    const SizedBox(height: 20),
+                    DropdownButton<String>(
+                      items: charityList.map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (_) {},
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    BuildTextField(
+                      hint: "Сумманы жазыңыз",
+                      controller: sum,
+                      inputType: TextInputType.number,
+                      fillColor: kWhiteColor,
+                      onChange: (value) {},
+                    ),
+                    const SizedBox(
+                      height: 40,
+                    ),
+                    SizedBox(
+                      width: size.width,
+                      child: ElevatedButton(
+                        style: ButtonStyle(
+                          foregroundColor:
+                              WidgetStateProperty.all<Color>(Colors.white),
+                          backgroundColor:
+                              WidgetStateProperty.all<Color>(kPrimaryColor),
+                          shape:
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                        onPressed: () {
+                          var taskModel = TaskModel(
+                            id: widget.taskModel.id,
+                            title: title.text,
+                            description: description.text,
+                            charity: selectedCharity,
+                            sum: sum.text,
+                            completed: widget.taskModel.completed,
+                            startDateTime: _rangeStart,
+                            stopDateTime: _rangeEnd,
+                          );
+                          context
+                              .read<TasksBloc>()
+                              .add(UpdateTaskEvent(taskModel: taskModel));
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: buildText(
+                            'Жаңарту',
+                            kWhiteColor,
+                            textMedium,
+                            FontWeight.w600,
+                            TextAlign.center,
+                            TextOverflow.clip,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                );
+              },
             ),
-            body: GestureDetector(
-                behavior: HitTestBehavior.opaque,
-                onTap: () => FocusScope.of(context).unfocus(),
-                child: Padding(
-                    padding: const EdgeInsets.all(20),
-                    child: BlocConsumer<TasksBloc, TasksState>(
-                        listener: (context, state) {
-                      if (state is UpdateTaskFailure) {
-                        ScaffoldMessenger.of(context)
-                            .showSnackBar(getSnackBar(state.error, kRed));
-                      }
-                      if (state is UpdateTaskSuccess) {
-                        Navigator.pop(context);
-                      }
-                    }, builder: (context, state) {
-                      return ListView(
-                        children: [
-                          TableCalendar(
-                            calendarFormat: _calendarFormat,
-                            startingDayOfWeek: StartingDayOfWeek.monday,
-                            availableCalendarFormats: const {
-                              CalendarFormat.month: 'Month',
-                              CalendarFormat.week: 'Week',
-                            },
-                            rangeSelectionMode: RangeSelectionMode.toggledOn,
-                            focusedDay: _focusedDay,
-                            firstDay: DateTime.utc(2023, 1, 1),
-                            lastDay: DateTime.utc(2030, 1, 1),
-                            onPageChanged: (focusDay) {
-                              _focusedDay = focusDay;
-                            },
-                            selectedDayPredicate: (day) =>
-                                isSameDay(_selectedDay, day),
-                            rangeStartDay: _rangeStart,
-                            rangeEndDay: _rangeEnd,
-                            onFormatChanged: (format) {
-                              if (_calendarFormat != format) {
-                                setState(() {
-                                  _calendarFormat = format;
-                                });
-                              }
-                            },
-                            onRangeSelected: _onRangeSelected,
-                          ),
-                          const SizedBox(height: 20),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 20),
-                            decoration: BoxDecoration(
-                                color: kPrimaryColor.withOpacity(.1),
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(5))),
-                            child: buildText(
-                                _rangeStart != null && _rangeEnd != null
-                                    ? 'Task starting at ${formatDate(dateTime: _rangeStart.toString())} - ${formatDate(dateTime: _rangeEnd.toString())}'
-                                    : 'Select a date range',
-                                kPrimaryColor,
-                                textSmall,
-                                FontWeight.w400,
-                                TextAlign.start,
-                                TextOverflow.clip),
-                          ),
-                          const SizedBox(height: 20),
-                          buildText(
-                              'Title',
-                              kBlackColor,
-                              textMedium,
-                              FontWeight.bold,
-                              TextAlign.start,
-                              TextOverflow.clip),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          BuildTextField(
-                              hint: "Task Title",
-                              controller: title,
-                              inputType: TextInputType.text,
-                              fillColor: kWhiteColor,
-                              onChange: (value) {}),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          buildText(
-                              'Description',
-                              kBlackColor,
-                              textMedium,
-                              FontWeight.bold,
-                              TextAlign.start,
-                              TextOverflow.clip),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          BuildTextField(
-                              hint: "Task Description",
-                              controller: description,
-                              inputType: TextInputType.multiline,
-                              fillColor: kWhiteColor,
-                              onChange: (value) {}),
-                          const SizedBox(height: 20),
-                          SizedBox(
-                            width: size.width,
-                            child: ElevatedButton(
-                                style: ButtonStyle(
-                                  foregroundColor:
-                                      WidgetStateProperty.all<Color>(
-                                          Colors.white),
-                                  backgroundColor:
-                                      WidgetStateProperty.all<Color>(
-                                          kPrimaryColor),
-                                  shape: WidgetStateProperty.all<
-                                      RoundedRectangleBorder>(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                  ),
-                                ),
-                                onPressed: () {
-                                  var taskModel = TaskModel(
-                                      id: widget.taskModel.id,
-                                      title: title.text,
-                                      description: description.text,
-                                      completed: widget.taskModel.completed,
-                                      startDateTime: _rangeStart,
-                                      stopDateTime: _rangeEnd);
-                                  context.read<TasksBloc>().add(
-                                      UpdateTaskEvent(taskModel: taskModel));
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.all(15),
-                                  child: buildText(
-                                      'Update',
-                                      kWhiteColor,
-                                      textMedium,
-                                      FontWeight.w600,
-                                      TextAlign.center,
-                                      TextOverflow.clip),
-                                )),
-                          ),
-                        ],
-                      );
-                    })))));
+          ),
+        ),
+      ),
+    );
   }
 }
