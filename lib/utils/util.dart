@@ -26,7 +26,6 @@ SnackBar getSnackBar(String message, Color backgroundColor) {
 }
 
 class ApiUtil {
-  static String apiKey =
-      'sk-proj-qZHnbCppiKybFssjt2G8T3BlbkFJQaKQst6CnPg3VKbwtzLj';
+  static String apiKey = 'YOUR_API_KEY';
   static String baseUrl = 'https://api.openai.com/v1/chat/completions';
 }
