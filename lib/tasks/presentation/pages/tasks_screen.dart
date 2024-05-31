@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:sauap_planner/components/build_text_field.dart';
 import 'package:sauap_planner/components/custom_app_bar.dart';
 import 'package:sauap_planner/components/custom_menu.dart';
+import 'package:sauap_planner/components/warning_dialog.dart';
 import 'package:sauap_planner/tasks/data/local/model/task_model.dart';
 import 'package:sauap_planner/tasks/presentation/bloc/tasks_bloc.dart';
 import 'package:sauap_planner/tasks/presentation/widget/task_item_view.dart';
@@ -40,6 +41,7 @@ class TasksScreen extends StatefulWidget {
 
 class _TasksScreenState extends State<TasksScreen> {
   TextEditingController searchController = TextEditingController();
+  bool _warningDialogShown = false;
 
   @override
   void initState() {
@@ -145,8 +147,26 @@ class _TasksScreenState extends State<TasksScreen> {
                                   itemCount: state.tasks.length,
                                   itemBuilder: (context, index) {
                                     final task = state.tasks[index];
-                                    final isOverdue = task.stopDateTime
-                                        ?.isBefore(DateTime.now());
+                                    if (task.stopDateTime!
+                                            .isBefore(DateTime.now()) &&
+                                        !_warningDialogShown) {
+                                      _warningDialogShown = true;
+
+                                      WidgetsBinding.instance
+                                          .addPostFrameCallback((_) {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => WarningDialog(
+                                            charity: task.charity,
+                                          ),
+                                        );
+                                      });
+                                    }
+                                    final isOverdue =
+                                        task.stopDateTime?.isBefore(
+                                      DateTime.now(),
+                                    );
+
                                     return TaskItemView(
                                       taskModel: state.tasks[index],
                                       isOverdue: isOverdue!,

@@ -31,7 +31,7 @@ class _TaskItemViewState extends State<TaskItemView> {
       ),
       padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 5),
       decoration: BoxDecoration(
-        color: widget.isOverdue ? kGrey0 : kWhiteColor,
+        color: widget.isOverdue ? kRed : kWhiteColor,
         borderRadius: const BorderRadius.all(
           Radius.circular(16),
         ),

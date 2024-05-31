@@ -72,6 +72,8 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
 
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
         statusBarColor: Colors.transparent,
@@ -256,6 +258,56 @@ T —Time bound —уақытпен шектелген;""",
                         inputType: TextInputType.number,
                         fillColor: kWhiteColor,
                         onChange: (value) {}),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        elevation: WidgetStateProperty.all(0),
+                        foregroundColor:
+                            WidgetStateProperty.all<Color>(kWhiteColor),
+                        backgroundColor:
+                            WidgetStateProperty.all<Color>(kPrimaryColor),
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (_) {
+                            return Dialog(
+                              backgroundColor: kWhiteColor,
+                              child: Container(
+                                width: size.width * 0.8,
+                                height: size.height * 0.3,
+                                decoration: const BoxDecoration(
+                                  image: DecorationImage(
+                                    image: ExactAssetImage(
+                                      'assets/images/smart.png',
+                                    ),
+                                    fit: BoxFit.contain,
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.all(15),
+                        child: buildText(
+                          'SMART',
+                          kWhiteColor,
+                          textMedium,
+                          FontWeight.w600,
+                          TextAlign.center,
+                          TextOverflow.clip,
+                        ),
+                      ),
+                    ),
                     const SizedBox(
                       height: 40,
                     ),

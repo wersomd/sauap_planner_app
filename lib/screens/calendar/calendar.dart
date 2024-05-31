@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:sauap_planner/components/custom_app_bar.dart';
 import 'package:sauap_planner/components/custom_menu.dart';
 import 'package:sauap_planner/components/widgets.dart';
-import 'package:sauap_planner/tasks/presentation/pages/tasks_screen.dart';
+import 'package:sauap_planner/tasks/presentation/bloc/tasks_bloc.dart';
 import 'package:sauap_planner/utils/color_palette.dart';
+import 'package:sauap_planner/utils/font_sizes.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class CalendarPage extends StatefulWidget {
@@ -40,10 +42,6 @@ class _CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    const taskScreen = TasksScreen();
-    final tasks = taskScreen.getTasks(context);
-    final taskCount = tasks.length;
-
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: kScaffoldColor,
@@ -76,11 +74,13 @@ class _CalendarPageState extends State<CalendarPage> {
                 firstDay: DateTime.utc(2023, 1, 1),
                 lastDay: DateTime.utc(2030, 1, 1),
                 onPageChanged: (focusDay) {
-                  _focusedDay = focusDay;
+                  setState(() {
+                    _focusedDay = focusDay;
+                  });
                 },
                 calendarStyle: const CalendarStyle(
                   todayDecoration: BoxDecoration(
-                    color: Colors.purpleAccent,
+                    color: kPrimaryColor,
                     shape: BoxShape.circle,
                   ),
                   selectedDecoration: BoxDecoration(
@@ -112,80 +112,107 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
             ),
             const SizedBox(height: 30),
-            buildText(
-              "Сізде $taskCount тапсырма бар",
-              kDarkPurple,
-              20,
-              FontWeight.w500,
-              TextAlign.center,
-              TextOverflow.clip,
-            ),
-            const SizedBox(height: 10),
-            Expanded(
-              child: ListView.builder(
-                itemCount: tasks.length,
-                itemBuilder: (context, index) {
-                  final task = tasks[index];
-                  return Container(
-                    margin: const EdgeInsets.symmetric(
-                      vertical: 8,
-                      horizontal: 16,
-                    ),
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(35),
-                      boxShadow: const [],
-                    ),
-                    child: Row(
+            BlocBuilder<TasksBloc, TasksState>(
+              builder: (context, state) {
+                if (state is TasksLoading) {
+                  return const Center(child: CircularProgressIndicator());
+                } else if (state is FetchTasksSuccess) {
+                  final tasks = state.tasks;
+                  final taskCount = tasks.length;
+
+                  return Expanded(
+                    child: Column(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.all(8),
-                          decoration: const BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [kPrimaryColor, kSecondColor],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            shape: BoxShape.circle,
-                          ),
-                          child: Icon(
-                            task.completed
-                                ? Icons.check
-                                : Icons.circle_outlined,
-                            color: Colors.white,
-                          ),
+                        buildText(
+                          "Сізде $taskCount тапсырма бар",
+                          kDarkPurple,
+                          20,
+                          FontWeight.w500,
+                          TextAlign.center,
+                          TextOverflow.clip,
                         ),
-                        const SizedBox(width: 16),
+                        const SizedBox(height: 10),
                         Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                DateFormat('HH:mm').format(task.startDateTime!),
-                                style: const TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w200,
+                          child: ListView.builder(
+                            itemCount: tasks.length,
+                            itemBuilder: (context, index) {
+                              final task = tasks[index];
+                              return Container(
+                                margin: const EdgeInsets.symmetric(
+                                  vertical: 8,
+                                  horizontal: 16,
                                 ),
-                              ),
-                              const SizedBox(height: 5),
-                              Text(
-                                task.title,
-                                style: const TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w500,
+                                padding: const EdgeInsets.all(16),
+                                decoration: BoxDecoration(
+                                  color: kWhiteColor,
+                                  borderRadius: BorderRadius.circular(35),
                                 ),
-                              ),
-                            ],
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: Icon(
+                                        task.completed
+                                            ? Icons.check
+                                            : Icons.circle_outlined,
+                                        color: kPrimaryColor,
+                                        size: 28,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 16),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          buildText(
+                                            DateFormat('M/d/y')
+                                                .format(task.startDateTime!),
+                                            kGrey1,
+                                            14,
+                                            FontWeight.w300,
+                                            TextAlign.start,
+                                            TextOverflow.clip,
+                                          ),
+                                          const SizedBox(height: 5),
+                                          buildText(
+                                            task.title,
+                                            kBlackColor,
+                                            18,
+                                            FontWeight.w500,
+                                            TextAlign.start,
+                                            TextOverflow.clip,
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
                           ),
                         ),
                       ],
                     ),
                   );
-                },
-              ),
+                } else if (state is LoadTaskFailure) {
+                  return Center(
+                    child: buildText(
+                      state.error,
+                      kBlackColor,
+                      textMedium,
+                      FontWeight.normal,
+                      TextAlign.center,
+                      TextOverflow.clip,
+                    ),
+                  );
+                } else {
+                  return Container();
+                }
+              },
             ),
           ],
         ),
