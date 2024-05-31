@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sauap_planner/components/widgets.dart';
+import 'package:sauap_planner/routes/pages.dart';
 import 'package:sauap_planner/utils/color_palette.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -11,18 +12,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    AlertDialog alert = const AlertDialog(
-      title: Text(
-        "Ескерту!",
-        textAlign: TextAlign.center,
-      ),
-      content: Text(
-        """ Құрметті пайдаланушы! \n Тапсырма уақыты бітуде, сіз еңгізген сумма “Таңдалған қордың” қаражатына аударылады""",
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 18, color: kRed),
-      ),
-    );
-
     return AppBar(
       title: buildText(
         title,
@@ -43,10 +32,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           padding: const EdgeInsets.all(8.0),
           child: IconButton(
             onPressed: () {
-              showDialog(context: context, builder: (context) => alert);
+              Navigator.pushNamed(context, Pages.sauapAi);
             },
             icon: const Icon(
-              Icons.light_mode_outlined,
+              Icons.smart_button,
               size: 30,
             ),
           ),

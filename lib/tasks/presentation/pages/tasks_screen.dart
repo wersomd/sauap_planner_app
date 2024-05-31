@@ -40,18 +40,17 @@ class TasksScreen extends StatefulWidget {
 
 class _TasksScreenState extends State<TasksScreen> {
   TextEditingController searchController = TextEditingController();
-  // final _user = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
-    super.initState();
     context.read<TasksBloc>().add(FetchTaskEvent());
+    super.initState();
+  }
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        FocusScope.of(context).requestFocus();
-      }
-    });
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -74,20 +73,26 @@ class _TasksScreenState extends State<TasksScreen> {
           ),
           body: GestureDetector(
             behavior: HitTestBehavior.opaque,
-            onTap: () => FocusScope.of(context).unfocus(),
+            onTap: () {
+              if (mounted) {
+                FocusScope.of(context).unfocus();
+              }
+            },
             child: Padding(
               padding: const EdgeInsets.all(20),
               child: BlocConsumer<TasksBloc, TasksState>(
                 listener: (context, state) {
                   if (state is LoadTaskFailure) {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(getSnackBar(state.error, kRed));
+                    if (mounted) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(getSnackBar(state.error, kRed));
+                    }
                   }
 
                   if (state is AddTaskFailure || state is UpdateTaskFailure) {
-                    context.read<TasksBloc>().add(
-                          FetchTaskEvent(),
-                        );
+                    if (mounted) {
+                      context.read<TasksBloc>().add(FetchTaskEvent());
+                    }
                   }
                 },
                 builder: (context, state) {
@@ -124,9 +129,11 @@ class _TasksScreenState extends State<TasksScreen> {
                                 ),
                                 fillColor: kWhiteColor,
                                 onChange: (value) {
-                                  context.read<TasksBloc>().add(
-                                        SearchTaskEvent(keywords: value),
-                                      );
+                                  if (mounted) {
+                                    context.read<TasksBloc>().add(
+                                          SearchTaskEvent(keywords: value),
+                                        );
+                                  }
                                 },
                               ),
                               const SizedBox(
@@ -169,19 +176,21 @@ class _TasksScreenState extends State<TasksScreen> {
                                   height: 50,
                                 ),
                                 buildText(
-                                    'Тапсырмаларды жоспарлаңыз',
-                                    kBlackColor,
-                                    textBold,
-                                    FontWeight.w600,
-                                    TextAlign.center,
-                                    TextOverflow.clip),
+                                  'Тапсырмаларды жоспарлаңыз',
+                                  kBlackColor,
+                                  textBold,
+                                  FontWeight.w600,
+                                  TextAlign.center,
+                                  TextOverflow.clip,
+                                ),
                                 buildText(
-                                    'Тапсырмаларды оңай әрі жеңіл орындаңыз',
-                                    kBlackColor.withOpacity(.5),
-                                    textMedium,
-                                    FontWeight.normal,
-                                    TextAlign.center,
-                                    TextOverflow.clip),
+                                  'Тапсырмаларды оңай әрі жеңіл орындаңыз',
+                                  kBlackColor.withOpacity(.5),
+                                  textMedium,
+                                  FontWeight.normal,
+                                  TextAlign.center,
+                                  TextOverflow.clip,
+                                ),
                               ],
                             ),
                           );

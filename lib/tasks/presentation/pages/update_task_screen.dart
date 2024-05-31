@@ -179,14 +179,54 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
                         fillColor: kWhiteColor,
                         onChange: (value) {}),
                     const SizedBox(height: 20),
-                    DropdownButton<String>(
+                    DropdownButtonFormField<String>(
+                      dropdownColor: kWhiteColor,
+                      decoration: const InputDecoration(
+                        filled: false,
+                        fillColor: kWhiteColor,
+                        labelText: "Фондты таңдаңыз",
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 16,
+                          horizontal: 16,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide:
+                              BorderSide(width: 1, color: kPrimaryColor),
+                        ),
+                        disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: BorderSide(width: 0, color: kDarkPurple),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: BorderSide(width: 0, color: kGrey1),
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide: BorderSide(width: 0, color: kGrey1)),
+                        errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide: BorderSide(width: 1, color: kRed)),
+                        focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide: BorderSide(width: 1, color: kGrey1)),
+                        focusColor: kWhiteColor,
+                        hoverColor: kWhiteColor,
+                      ),
                       items: charityList.map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
                         );
                       }).toList(),
-                      onChanged: (_) {},
+                      onChanged: (String? newValue) {
+                        setState(
+                          () {
+                            selectedCharity = newValue!;
+                          },
+                        );
+                      },
                     ),
                     const SizedBox(
                       height: 20,

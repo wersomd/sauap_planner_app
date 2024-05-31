@@ -29,7 +29,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
 
-  final charityList = [
+  List<String> charityList = [
     "ОФ Biz Birgemiz Qazaqstan",
     "Фонд Асар-Уме",
     "Фонд Харекет",
@@ -43,12 +43,20 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     "Фонд Человек в маске",
   ];
 
-  String selectedCharity = '';
+  String selectedCharity = 'Фондты таңдаңыз';
 
   @override
   void initState() {
     _selectedDay = _focusedDay;
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    // title.dispose();
+    // description.dispose();
+    //sum.dispose();
+    super.dispose();
   }
 
   _onRangeSelected(DateTime? start, DateTime? end, DateTime focusDay) {
@@ -146,8 +154,14 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    buildText('Атауы', kBlackColor, textMedium, FontWeight.bold,
-                        TextAlign.start, TextOverflow.clip),
+                    buildText(
+                      'Атауы',
+                      kBlackColor,
+                      textMedium,
+                      FontWeight.bold,
+                      TextAlign.start,
+                      TextOverflow.clip,
+                    ),
                     const SizedBox(
                       height: 10,
                     ),
@@ -185,6 +199,40 @@ T —Time bound —уақытпен шектелген;""",
                     ),
                     const SizedBox(height: 20),
                     DropdownButtonFormField<String>(
+                      dropdownColor: kWhiteColor,
+                      decoration: const InputDecoration(
+                        filled: false,
+                        fillColor: kWhiteColor,
+                        labelText: "Фондты таңдаңыз",
+                        contentPadding: EdgeInsets.symmetric(
+                          vertical: 16,
+                          horizontal: 16,
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide:
+                              BorderSide(width: 1, color: kPrimaryColor),
+                        ),
+                        disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: BorderSide(width: 0, color: kDarkPurple),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: BorderSide(width: 0, color: kGrey1),
+                        ),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide: BorderSide(width: 0, color: kGrey1)),
+                        errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide: BorderSide(width: 1, color: kRed)),
+                        focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            borderSide: BorderSide(width: 1, color: kGrey1)),
+                        focusColor: kWhiteColor,
+                        hoverColor: kWhiteColor,
+                      ),
                       items: charityList.map((String value) {
                         return DropdownMenuItem<String>(
                           value: value,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sauap_planner/routes/pages.dart';
+import 'package:sauap_planner/screens/ai/sauap_ai.dart';
 import 'package:sauap_planner/screens/auth/login/login.dart';
 import 'package:sauap_planner/screens/auth/registration/signup.dart';
 import 'package:sauap_planner/screens/billing/billing.dart';
@@ -58,6 +59,10 @@ Route onGenerateRoute(RouteSettings routeSettings) {
     case Pages.profile:
       return MaterialPageRoute(
         builder: (context) => const ProfilePage(),
+      );
+    case Pages.sauapAi:
+      return MaterialPageRoute(
+        builder: (context) => const SauapAi(),
       );
     case Pages.updateTask:
       final args = routeSettings.arguments as TaskModel;

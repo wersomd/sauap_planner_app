@@ -43,18 +43,12 @@ class _TaskItemViewState extends State<TaskItemView> {
           Checkbox(
             value: widget.taskModel.completed,
             onChanged: (value) {
-              var taskModel = TaskModel(
-                id: widget.taskModel.id,
-                title: widget.taskModel.title,
-                description: widget.taskModel.description,
-                charity: widget.taskModel.charity,
-                sum: widget.taskModel.sum,
-                completed: widget.taskModel.completed,
-                startDateTime: widget.taskModel.startDateTime,
-                stopDateTime: widget.taskModel.stopDateTime,
-              );
+              setState(() {
+                widget.taskModel.completed = value!;
+              });
+
               context.read<TasksBloc>().add(
-                    UpdateTaskEvent(taskModel: taskModel),
+                    UpdateTaskEvent(taskModel: widget.taskModel),
                   );
             },
           ),

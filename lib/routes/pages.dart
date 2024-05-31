@@ -8,6 +8,7 @@ class Pages {
   static const profile = '/profile';
   static const calendar = '/calendar';
   static const billing = '/billing';
+  static const sauapAi = '/sauapAi';
   static const createNewTask = '/createNewTask';
   static const updateTask = '/updateNewTask';
 }

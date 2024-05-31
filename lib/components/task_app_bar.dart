@@ -11,13 +11,14 @@ class TaskAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Color? backgroundColor;
   final List<Widget>? actionWidgets;
 
-  const TaskAppBar(
-      {super.key,
-      required this.title,
-      this.onBackTap,
-      this.showBackArrow = true,
-      this.backgroundColor = kWhiteColor,
-      this.actionWidgets});
+  const TaskAppBar({
+    super.key,
+    required this.title,
+    this.onBackTap,
+    this.showBackArrow = true,
+    this.backgroundColor = kWhiteColor,
+    this.actionWidgets,
+  });
 
   @override
   Widget build(BuildContext context) {
