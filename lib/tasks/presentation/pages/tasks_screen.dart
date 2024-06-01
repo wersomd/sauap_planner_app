@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -43,16 +45,46 @@ class _TasksScreenState extends State<TasksScreen> {
   TextEditingController searchController = TextEditingController();
   bool _warningDialogShown = false;
 
+  Timer? _timer;
+
   @override
   void initState() {
     context.read<TasksBloc>().add(FetchTaskEvent());
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      _checkTaskStatus();
+    });
     super.initState();
   }
 
   @override
   void dispose() {
-    searchController.dispose();
+    _timer?.cancel();
+
     super.dispose();
+  }
+
+  void showWarningDialog(TaskModel task) {
+    showDialog(
+      context: context,
+      builder: (context) => WarningDialog(
+        charity: task.charity,
+      ),
+    );
+  }
+
+  void _checkTaskStatus() {
+    final tasks = widget.getTasks(context);
+
+    for (final task in tasks) {
+      if (task.stopDateTime != null && task.endTime != null) {
+        final now = DateTime.now();
+
+        if (now.isAfter(task.stopDateTime!
+            .add(Duration(seconds: task.endTime!.minute * 60)))) {
+          showWarningDialog(task);
+        }
+      }
+    }
   }
 
   @override
@@ -73,151 +105,151 @@ class _TasksScreenState extends State<TasksScreen> {
             title: "",
             scaffoldKey: scaffoldKey,
           ),
-          body: GestureDetector(
-            behavior: HitTestBehavior.opaque,
-            onTap: () {
-              if (mounted) {
-                FocusScope.of(context).unfocus();
-              }
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(20),
-              child: BlocConsumer<TasksBloc, TasksState>(
-                listener: (context, state) {
-                  if (state is LoadTaskFailure) {
-                    if (mounted) {
-                      ScaffoldMessenger.of(context)
-                          .showSnackBar(getSnackBar(state.error, kRed));
-                    }
+          body: Padding(
+            padding: const EdgeInsets.all(20),
+            child: BlocConsumer<TasksBloc, TasksState>(
+              listener: (context, state) {
+                if (state is LoadTaskFailure) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(getSnackBar(state.error, kRed));
                   }
+                }
 
-                  if (state is AddTaskFailure || state is UpdateTaskFailure) {
-                    if (mounted) {
-                      context.read<TasksBloc>().add(FetchTaskEvent());
-                    }
+                if (state is AddTaskFailure || state is UpdateTaskFailure) {
+                  if (mounted) {
+                    context.read<TasksBloc>().add(FetchTaskEvent());
                   }
-                },
-                builder: (context, state) {
-                  if (state is TasksLoading) {
-                    return const Center(
-                      child: CupertinoActivityIndicator(),
-                    );
-                  }
+                }
+              },
+              builder: (context, state) {
+                if (state is TasksLoading) {
+                  return const Center(
+                    child: CupertinoActivityIndicator(),
+                  );
+                }
 
-                  if (state is LoadTaskFailure) {
-                    return Center(
-                      child: buildText(
-                        state.error,
-                        kBlackColor,
-                        textMedium,
-                        FontWeight.normal,
-                        TextAlign.center,
-                        TextOverflow.clip,
-                      ),
-                    );
-                  }
+                if (state is LoadTaskFailure) {
+                  return Center(
+                    child: buildText(
+                      state.error,
+                      kBlackColor,
+                      textMedium,
+                      FontWeight.normal,
+                      TextAlign.center,
+                      TextOverflow.clip,
+                    ),
+                  );
+                }
 
-                  if (state is FetchTasksSuccess) {
-                    return state.tasks.isNotEmpty || state.isSearching
-                        ? Column(
-                            children: [
-                              BuildTextField(
-                                hint: "Іздеу",
-                                controller: searchController,
-                                inputType: TextInputType.text,
-                                prefixIcon: const Icon(
-                                  Icons.search,
-                                  color: kGrey2,
-                                ),
-                                fillColor: kWhiteColor,
-                                onChange: (value) {
-                                  if (mounted) {
-                                    context.read<TasksBloc>().add(
-                                          SearchTaskEvent(keywords: value),
-                                        );
+                if (state is FetchTasksSuccess) {
+                  return state.tasks.isNotEmpty || state.isSearching
+                      ? Column(
+                          children: [
+                            BuildTextField(
+                              hint: "Іздеу",
+                              controller: searchController,
+                              inputType: TextInputType.text,
+                              prefixIcon: const Icon(
+                                Icons.search,
+                                color: kGrey2,
+                              ),
+                              fillColor: kWhiteColor,
+                              onChange: (value) {
+                                if (mounted) {
+                                  context.read<TasksBloc>().add(
+                                        SearchTaskEvent(keywords: value),
+                                      );
+                                }
+                              },
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            Expanded(
+                              child: ListView.separated(
+                                shrinkWrap: true,
+                                itemCount: state.tasks.length,
+                                itemBuilder: (context, index) {
+                                  final task = state.tasks[index];
+                                  if (task.stopDateTime!
+                                          .isBefore(DateTime.now()) &&
+                                      !_warningDialogShown) {
+                                    _warningDialogShown = true;
+
+                                    WidgetsBinding.instance
+                                        .addPostFrameCallback((_) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (context) => WarningDialog(
+                                          charity: task.charity,
+                                        ),
+                                      );
+                                    });
                                   }
+                                  final now = DateTime.now();
+                                  final isOverdue = task.stopDateTime != null &&
+                                          task.endTime != null
+                                      ? DateTime(
+                                          task.stopDateTime!.year,
+                                          task.stopDateTime!.month,
+                                          task.stopDateTime!.day,
+                                          task.endTime!.hour,
+                                          task.endTime!.minute,
+                                        ).isBefore(now)
+                                      : task.stopDateTime?.isBefore(now) ??
+                                          false;
+
+                                  return TaskItemView(
+                                    taskModel: state.tasks[index],
+                                    isOverdue: isOverdue,
+                                  );
+                                },
+                                separatorBuilder:
+                                    (BuildContext context, int index) {
+                                  return const Divider(
+                                    color: kGrey3,
+                                  );
                                 },
                               ),
-                              const SizedBox(
-                                height: 20,
+                            )
+                          ],
+                        )
+                      : Center(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SvgPicture.asset(
+                                'assets/svgs/tasks.svg',
+                                height: size.height * .20,
+                                width: size.width,
                               ),
-                              Expanded(
-                                child: ListView.separated(
-                                  shrinkWrap: true,
-                                  itemCount: state.tasks.length,
-                                  itemBuilder: (context, index) {
-                                    final task = state.tasks[index];
-                                    if (task.stopDateTime!
-                                            .isBefore(DateTime.now()) &&
-                                        !_warningDialogShown) {
-                                      _warningDialogShown = true;
-
-                                      WidgetsBinding.instance
-                                          .addPostFrameCallback((_) {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) => WarningDialog(
-                                            charity: task.charity,
-                                          ),
-                                        );
-                                      });
-                                    }
-                                    final isOverdue =
-                                        task.stopDateTime?.isBefore(
-                                      DateTime.now(),
-                                    );
-
-                                    return TaskItemView(
-                                      taskModel: state.tasks[index],
-                                      isOverdue: isOverdue!,
-                                    );
-                                  },
-                                  separatorBuilder:
-                                      (BuildContext context, int index) {
-                                    return const Divider(
-                                      color: kGrey3,
-                                    );
-                                  },
-                                ),
-                              )
+                              const SizedBox(
+                                height: 50,
+                              ),
+                              buildText(
+                                'Тапсырмаларды жоспарлаңыз',
+                                kBlackColor,
+                                textBold,
+                                FontWeight.w600,
+                                TextAlign.center,
+                                TextOverflow.clip,
+                              ),
+                              buildText(
+                                'Тапсырмаларды оңай әрі жеңіл орындаңыз',
+                                kBlackColor.withOpacity(.5),
+                                textMedium,
+                                FontWeight.normal,
+                                TextAlign.center,
+                                TextOverflow.clip,
+                              ),
                             ],
-                          )
-                        : Center(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/svgs/tasks.svg',
-                                  height: size.height * .20,
-                                  width: size.width,
-                                ),
-                                const SizedBox(
-                                  height: 50,
-                                ),
-                                buildText(
-                                  'Тапсырмаларды жоспарлаңыз',
-                                  kBlackColor,
-                                  textBold,
-                                  FontWeight.w600,
-                                  TextAlign.center,
-                                  TextOverflow.clip,
-                                ),
-                                buildText(
-                                  'Тапсырмаларды оңай әрі жеңіл орындаңыз',
-                                  kBlackColor.withOpacity(.5),
-                                  textMedium,
-                                  FontWeight.normal,
-                                  TextAlign.center,
-                                  TextOverflow.clip,
-                                ),
-                              ],
-                            ),
-                          );
-                  }
-                  return Container();
-                },
-              ),
+                          ),
+                        );
+                }
+                return Container();
+              },
             ),
           ),
         ),

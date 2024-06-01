@@ -39,6 +39,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       if (event.taskModel.stopDateTime == null) {
         return emit(AddTaskFailure(error: 'Аяқталу уақыты белгісіз!'));
       }
+      if (event.taskModel.endTime == null) {
+        return emit(AddTaskFailure(error: 'Аяқтау уақытын белгісіз!'));
+      }
       if (event.taskModel.sum.trim().isEmpty) {
         return emit(UpdateTaskFailure(error: 'Сумманы жазыңыз!'));
       }
@@ -79,6 +82,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       }
       if (event.taskModel.stopDateTime == null) {
         return emit(UpdateTaskFailure(error: 'Аяқталу уақыты белгісіз!'));
+      }
+      if (event.taskModel.endTime == null) {
+        return emit(UpdateTaskFailure(error: 'Аяқтау уақыты белгісіз!'));
       }
       if (event.taskModel.sum.trim().isEmpty) {
         return emit(UpdateTaskFailure(error: 'Сумманы жазыңыз!'));

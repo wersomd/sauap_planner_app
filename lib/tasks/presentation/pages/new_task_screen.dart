@@ -29,6 +29,8 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
 
+  TimeOfDay? _endTime;
+
   List<String> charityList = [
     "ОФ Biz Birgemiz Qazaqstan",
     "Фонд Асар-Уме",
@@ -45,6 +47,21 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
 
   String selectedCharity = 'Фондты таңдаңыз';
 
+  Future<TimeOfDay?> _selectTime(
+      BuildContext context, TimeOfDay initialTime) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          child: child!,
+        );
+      },
+    );
+    return picked;
+  }
+
   @override
   void initState() {
     _selectedDay = _focusedDay;
@@ -53,21 +70,19 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
 
   @override
   void dispose() {
-    // title.dispose();
-    // description.dispose();
-    //sum.dispose();
+    title.dispose();
+    description.dispose();
+    sum.dispose();
     super.dispose();
   }
 
   _onRangeSelected(DateTime? start, DateTime? end, DateTime focusDay) {
-    setState(
-      () {
-        _selectedDay = null;
-        _focusedDay = focusDay;
-        _rangeStart = start;
-        _rangeEnd = end;
-      },
-    );
+    setState(() {
+      _selectedDay = null;
+      _focusedDay = focusDay;
+      _rangeStart = start;
+      _rangeEnd = end;
+    });
   }
 
   @override
@@ -125,11 +140,9 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       rangeEndDay: _rangeEnd,
                       onFormatChanged: (format) {
                         if (_calendarFormat != format) {
-                          setState(
-                            () {
-                              _calendarFormat = format;
-                            },
-                          );
+                          setState(() {
+                            _calendarFormat = format;
+                          });
                         }
                       },
                       onRangeSelected: _onRangeSelected,
@@ -140,9 +153,8 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                           vertical: 10, horizontal: 20),
                       decoration: BoxDecoration(
                         color: kPrimaryColor.withOpacity(.1),
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(5),
-                        ),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(5)),
                       ),
                       child: buildText(
                         _rangeStart != null && _rangeEnd != null
@@ -156,6 +168,39 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       ),
                     ),
                     const SizedBox(height: 20),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            WidgetStateProperty.all<Color>(Colors.white),
+                        backgroundColor:
+                            WidgetStateProperty.all<Color>(kPrimaryColor),
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      onPressed: () async {
+                        final endTime =
+                            await _selectTime(context, TimeOfDay.now());
+                        if (endTime != null) {
+                          setState(() {
+                            _endTime = endTime;
+                          });
+                        }
+                      },
+                      child: buildText(
+                        _endTime != null
+                            ? 'Аяқтау уақыты: ${_endTime!.format(context)}'
+                            : 'Аяқтау уақытын таңдаңыз',
+                        kWhiteColor,
+                        18,
+                        FontWeight.w400,
+                        TextAlign.center,
+                        TextOverflow.clip,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
                     buildText(
                       'Атауы',
                       kBlackColor,
@@ -164,18 +209,15 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       TextAlign.start,
                       TextOverflow.clip,
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
                     BuildTextField(
-                        hint: "Тапсырма атауы",
-                        controller: title,
-                        inputType: TextInputType.text,
-                        fillColor: kWhiteColor,
-                        onChange: (value) {}),
-                    const SizedBox(
-                      height: 20,
+                      hint: "Тапсырма атауы",
+                      controller: title,
+                      inputType: TextInputType.text,
+                      fillColor: kWhiteColor,
+                      onChange: (value) {},
                     ),
+                    const SizedBox(height: 20),
                     buildText(
                       'Сипаттамасы',
                       kBlackColor,
@@ -184,9 +226,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       TextAlign.start,
                       TextOverflow.clip,
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
+                    const SizedBox(height: 10),
                     BuildTextField(
                       hint: """
 S — Specific — нақты;
@@ -206,10 +246,8 @@ T —Time bound —уақытпен шектелген;""",
                         filled: false,
                         fillColor: kWhiteColor,
                         labelText: "Фондты таңдаңыз",
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 16,
-                          horizontal: 16,
-                        ),
+                        contentPadding:
+                            EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.all(Radius.circular(5)),
                           borderSide:
@@ -224,14 +262,17 @@ T —Time bound —уақытпен шектелген;""",
                           borderSide: BorderSide(width: 0, color: kGrey1),
                         ),
                         border: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide: BorderSide(width: 0, color: kGrey1)),
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: BorderSide(width: 0, color: kGrey1),
+                        ),
                         errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide: BorderSide(width: 1, color: kRed)),
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: BorderSide(width: 1, color: kRed),
+                        ),
                         focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            borderSide: BorderSide(width: 1, color: kGrey1)),
+                          borderRadius: BorderRadius.all(Radius.circular(5)),
+                          borderSide: BorderSide(width: 1, color: kGrey1),
+                        ),
                         focusColor: kWhiteColor,
                         hoverColor: kWhiteColor,
                       ),
@@ -242,25 +283,20 @@ T —Time bound —уақытпен шектелген;""",
                         );
                       }).toList(),
                       onChanged: (String? newValue) {
-                        setState(
-                          () {
-                            selectedCharity = newValue!;
-                          },
-                        );
+                        setState(() {
+                          selectedCharity = newValue!;
+                        });
                       },
                     ),
-                    const SizedBox(
-                      height: 20,
-                    ),
+                    const SizedBox(height: 20),
                     BuildTextField(
-                        hint: "Сумманы жазыңыз",
-                        controller: sum,
-                        inputType: TextInputType.number,
-                        fillColor: kWhiteColor,
-                        onChange: (value) {}),
-                    const SizedBox(
-                      height: 20,
+                      hint: "Сумманы жазыңыз",
+                      controller: sum,
+                      inputType: TextInputType.number,
+                      fillColor: kWhiteColor,
+                      onChange: (value) {},
                     ),
+                    const SizedBox(height: 20),
                     ElevatedButton(
                       style: ButtonStyle(
                         elevation: WidgetStateProperty.all(0),
@@ -286,8 +322,7 @@ T —Time bound —уақытпен шектелген;""",
                                 decoration: const BoxDecoration(
                                   image: DecorationImage(
                                     image: ExactAssetImage(
-                                      'assets/images/smart.png',
-                                    ),
+                                        'assets/images/smart.png'),
                                     fit: BoxFit.contain,
                                   ),
                                 ),
@@ -308,9 +343,7 @@ T —Time bound —уақытпен шектелген;""",
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      height: 40,
-                    ),
+                    const SizedBox(height: 40),
                     Row(
                       children: [
                         Expanded(
@@ -318,15 +351,12 @@ T —Time bound —уақытпен шектелген;""",
                             style: ButtonStyle(
                               foregroundColor:
                                   WidgetStateProperty.all<Color>(Colors.white),
-                              backgroundColor: WidgetStateProperty.all<Color>(
-                                kWhiteColor,
-                              ),
+                              backgroundColor:
+                                  WidgetStateProperty.all<Color>(kWhiteColor),
                               shape: WidgetStateProperty.all<
                                   RoundedRectangleBorder>(
                                 RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(
-                                    10,
-                                  ),
+                                  borderRadius: BorderRadius.circular(10),
                                 ),
                               ),
                             ),
@@ -346,9 +376,7 @@ T —Time bound —уақытпен шектелген;""",
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          width: 20,
-                        ),
+                        const SizedBox(width: 20),
                         Expanded(
                           child: ElevatedButton(
                             style: ButtonStyle(
@@ -375,6 +403,7 @@ T —Time bound —уақытпен шектелген;""",
                                 sum: sum.text,
                                 startDateTime: _rangeStart,
                                 stopDateTime: _rangeEnd,
+                                endTime: _endTime,
                               );
 
                               context.read<TasksBloc>().add(

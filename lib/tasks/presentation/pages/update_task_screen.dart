@@ -32,6 +32,8 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
   DateTime? _rangeStart;
   DateTime? _rangeEnd;
 
+  TimeOfDay? _endTime;
+
   final charityList = [
     "ОФ Biz Birgemiz Qazaqstan",
     "Фонд Асар-Уме",
@@ -47,6 +49,21 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
   ];
 
   String selectedCharity = '';
+
+  Future<TimeOfDay?> _selectTime(
+      BuildContext context, TimeOfDay initialTime) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: initialTime,
+      builder: (BuildContext context, Widget? child) {
+        return MediaQuery(
+          data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: false),
+          child: child!,
+        );
+      },
+    );
+    return picked;
+  }
 
   _onRangeSelected(DateTime? start, DateTime? end, DateTime focusDay) {
     setState(() {
@@ -71,6 +88,7 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
     description.text = widget.taskModel.description;
     sum.text = widget.taskModel.sum;
     selectedCharity = widget.taskModel.charity;
+    _endTime = widget.taskModel.endTime;
     _selectedDay = _focusedDay;
     _rangeStart = widget.taskModel.startDateTime;
     _rangeEnd = widget.taskModel.stopDateTime;
@@ -153,6 +171,41 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
                           TextOverflow.clip),
                     ),
                     const SizedBox(height: 20),
+                    ElevatedButton(
+                      style: ButtonStyle(
+                        foregroundColor:
+                            WidgetStateProperty.all<Color>(Colors.white),
+                        backgroundColor:
+                            WidgetStateProperty.all<Color>(kPrimaryColor),
+                        shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      onPressed: () async {
+                        final endTime =
+                            await _selectTime(context, TimeOfDay.now());
+                        if (endTime != null) {
+                          setState(() {
+                            _endTime = endTime;
+                          });
+                        }
+                      },
+                      child: buildText(
+                        _endTime != null
+                            ? 'Аяқтау уақыты: ${_endTime!.format(context)}'
+                            : 'Аяқтау уақытын таңдаңыз',
+                        kWhiteColor,
+                        18,
+                        FontWeight.w400,
+                        TextAlign.center,
+                        TextOverflow.clip,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
                     buildText('Атауы', kBlackColor, textMedium, FontWeight.bold,
                         TextAlign.start, TextOverflow.clip),
                     const SizedBox(
@@ -266,6 +319,7 @@ class _UpdateTaskScreenState extends State<UpdateTaskScreen> {
                             completed: widget.taskModel.completed,
                             startDateTime: _rangeStart,
                             stopDateTime: _rangeEnd,
+                            endTime: _endTime,
                           );
                           context
                               .read<TasksBloc>()

@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+
 class TaskModel {
   String id;
   String title;
@@ -6,6 +8,7 @@ class TaskModel {
   String sum;
   DateTime? startDateTime;
   DateTime? stopDateTime;
+  TimeOfDay? endTime;
   bool completed;
 
   TaskModel({
@@ -14,8 +17,9 @@ class TaskModel {
     required this.description,
     required this.charity,
     required this.sum,
-    required this.startDateTime,
-    required this.stopDateTime,
+    this.startDateTime,
+    this.stopDateTime,
+    this.endTime,
     this.completed = false,
   });
 
@@ -29,10 +33,17 @@ class TaskModel {
       'completed': completed,
       'startDateTime': startDateTime?.toIso8601String(),
       'stopDateTime': stopDateTime?.toIso8601String(),
+      'endTime': endTime != null ? '${endTime!.hour}:${endTime!.minute}' : null,
     };
   }
 
   factory TaskModel.fromJson(Map<String, dynamic> json) {
+    TimeOfDay? parseTimeOfDay(String? time) {
+      if (time == null) return null;
+      final parts = time.split(':');
+      return TimeOfDay(hour: int.parse(parts[0]), minute: int.parse(parts[1]));
+    }
+
     return TaskModel(
       id: json['id'],
       title: json['title'],
@@ -40,8 +51,13 @@ class TaskModel {
       charity: json['charity'],
       sum: json['sum'],
       completed: json['completed'],
-      startDateTime: DateTime.parse(json['startDateTime']),
-      stopDateTime: DateTime.parse(json['stopDateTime']),
+      startDateTime: json['startDateTime'] != null
+          ? DateTime.parse(json['startDateTime'])
+          : null,
+      stopDateTime: json['stopDateTime'] != null
+          ? DateTime.parse(json['stopDateTime'])
+          : null,
+      endTime: parseTimeOfDay(json['endTime']),
     );
   }
 
@@ -49,6 +65,6 @@ class TaskModel {
   String toString() {
     return 'TaskModel{id: $id, title: $title, description: $description, '
         'charity: $charity, sum: $sum, startDateTime: $startDateTime, stopDateTime: $stopDateTime, '
-        'completed: $completed}';
+        'endTime: $endTime, completed: $completed}';
   }
 }
