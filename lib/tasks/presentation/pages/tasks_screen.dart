@@ -82,6 +82,7 @@ class _TasksScreenState extends State<TasksScreen> {
         if (now.isAfter(task.stopDateTime!
             .add(Duration(seconds: task.endTime!.minute * 60)))) {
           showWarningDialog(task);
+          _warningDialogShown = true;
         }
       }
     }
@@ -178,14 +179,16 @@ class _TasksScreenState extends State<TasksScreen> {
                                     _warningDialogShown = true;
 
                                     WidgetsBinding.instance
-                                        .addPostFrameCallback((_) {
-                                      showDialog(
-                                        context: context,
-                                        builder: (context) => WarningDialog(
-                                          charity: task.charity,
-                                        ),
-                                      );
-                                    });
+                                        .addPostFrameCallback(
+                                      (_) {
+                                        showDialog(
+                                          context: context,
+                                          builder: (context) => WarningDialog(
+                                            charity: task.charity,
+                                          ),
+                                        );
+                                      },
+                                    );
                                   }
                                   final now = DateTime.now();
                                   final isOverdue = task.stopDateTime != null &&
