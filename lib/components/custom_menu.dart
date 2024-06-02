@@ -20,20 +20,14 @@ class CustomMenu extends StatelessWidget {
             decoration: const BoxDecoration(
               color: kTransparentColor,
             ),
-            currentAccountPicture: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CircleAvatar(
-                  backgroundColor: kPrimaryColor,
-                  maxRadius: 32,
-                  child: Container(
-                    padding: const EdgeInsets.all(
-                      12.0,
-                    ),
-                    child: Image.asset('assets/images/profile.png'),
-                  ),
-                ),
-              ],
+            currentAccountPicture: const CircleAvatar(
+              backgroundColor: kPrimaryColor,
+              radius: 60,
+              child: Icon(
+                Icons.person,
+                size: 60,
+                color: kWhiteColor,
+              ),
             ),
             accountName: buildText(
               user != null ? "${user.displayName}" : "Сіз тіркелмедіңіз",

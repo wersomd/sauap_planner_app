@@ -19,13 +19,14 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   final _user = FirebaseAuth.instance.currentUser;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-  File? _image;
-  final imagePicker = ImagePicker();
 
   final Uri _charity =
       Uri.parse('https://egov.kz/cms/ru/articles/charity-foundation');
 
   final Uri _whatsappLink = Uri.parse('https://wa.me/+77083169375');
+
+  String imageUrl = ' ';
+  File? _image;
 
   void _signIn() {
     Navigator.pushReplacementNamed(context, Pages.login);
@@ -42,6 +43,29 @@ class _ProfilePageState extends State<ProfilePage> {
           );
     } catch (e) {
       debugPrint("Error signing out: $e");
+    }
+  }
+
+  void pickUploadImage() async {
+    if (_user != null) {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+
+      if (image != null) {
+        setState(() {
+          _image = File(image.path);
+          imageUrl = image.path;
+        });
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: kRed,
+          content: Text(
+            'Сурет жүктеу үшін тіркеліңіз!',
+            style: TextStyle(fontSize: 16, color: kWhiteColor),
+          ),
+        ),
+      );
     }
   }
 
@@ -63,17 +87,45 @@ class _ProfilePageState extends State<ProfilePage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircleAvatar(
-                backgroundColor: kPrimaryColor,
-                maxRadius: 65,
-                child: Container(
-                  padding: const EdgeInsets.all(
-                    30.0,
+              Stack(
+                children: [
+                  Container(
+                    width: 120,
+                    height: 120,
+                    alignment: Alignment.center,
+                    decoration: const BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: kPrimaryColor,
+                    ),
+                    child: CircleAvatar(
+                      backgroundColor: kPrimaryColor,
+                      radius: 60,
+                      backgroundImage:
+                          imageUrl == ' ' ? null : FileImage(_image!),
+                      child: imageUrl == ' '
+                          ? const Icon(
+                              Icons.person,
+                              size: 80,
+                              color: kWhiteColor,
+                            )
+                          : null,
+                    ),
                   ),
-                  child: _image == null
-                      ? Image.asset('assets/images/profile.png')
-                      : Image.file(_image!),
-                ),
+                  Positioned(
+                    bottom: 0,
+                    left: 70,
+                    child: IconButton(
+                      icon: const Icon(
+                        Icons.add_a_photo_outlined,
+                        color: kWhiteColor,
+                        size: 30,
+                      ),
+                      onPressed: () {
+                        pickUploadImage();
+                      },
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -83,36 +135,6 @@ class _ProfilePageState extends State<ProfilePage> {
           Expanded(
             child: ListView(
               children: [
-                Card(
-                  margin:
-                      const EdgeInsets.only(left: 35, right: 35, bottom: 10),
-                  color: kTransparentColor,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    side: const BorderSide(color: kPrimaryColor),
-                  ),
-                  child: const ListTile(
-                    leading: Icon(
-                      Icons.photo,
-                      color: Colors.black54,
-                    ),
-                    title: Text(
-                      'Суретті ауыстыру',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                    trailing: Icon(
-                      Icons.arrow_forward_ios_outlined,
-                      color: Colors.black54,
-                    ),
-                  ),
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
                 Card(
                   margin:
                       const EdgeInsets.only(left: 35, right: 35, bottom: 10),
@@ -187,19 +209,22 @@ class _ProfilePageState extends State<ProfilePage> {
                     borderRadius: BorderRadius.circular(30),
                     side: const BorderSide(color: kPrimaryColor),
                   ),
-                  child: const ListTile(
-                    leading: Icon(
+                  child: ListTile(
+                    onTap: () {
+                      launchUrl(_whatsappLink);
+                    },
+                    leading: const Icon(
                       Icons.add_reaction_sharp,
                       color: Colors.black54,
                     ),
-                    title: Text(
+                    title: const Text(
                       'Достарды шақыру',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.normal,
                       ),
                     ),
-                    trailing: Icon(
+                    trailing: const Icon(
                       Icons.arrow_forward_ios_outlined,
                       color: Colors.black54,
                     ),

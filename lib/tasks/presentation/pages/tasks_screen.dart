@@ -50,7 +50,7 @@ class _TasksScreenState extends State<TasksScreen> {
   @override
   void initState() {
     context.read<TasksBloc>().add(FetchTaskEvent());
-    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
+    _timer = Timer.periodic(const Duration(minutes: 5), (timer) {
       _checkTaskStatus();
     });
     super.initState();
