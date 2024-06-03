@@ -159,7 +159,7 @@ class _TasksScreenState extends State<TasksScreen> {
                               onChange: (value) {
                                 if (mounted) {
                                   context.read<TasksBloc>().add(
-                                        SearchTaskEvent(keywords: value),
+                                        SearchTaskEvent(value, keywords: value),
                                       );
                                 }
                               },
@@ -173,9 +173,21 @@ class _TasksScreenState extends State<TasksScreen> {
                                 itemCount: state.tasks.length,
                                 itemBuilder: (context, index) {
                                   final task = state.tasks[index];
-                                  if (task.stopDateTime!
-                                          .isBefore(DateTime.now()) &&
-                                      !_warningDialogShown) {
+
+                                  final now = DateTime.now();
+                                  final isOverdue = task.stopDateTime != null &&
+                                          task.endTime != null
+                                      ? DateTime(
+                                          task.stopDateTime!.year,
+                                          task.stopDateTime!.month,
+                                          task.stopDateTime!.day,
+                                          task.endTime!.hour,
+                                          task.endTime!.minute,
+                                        ).isBefore(now)
+                                      : task.stopDateTime?.isBefore(now) ??
+                                          false;
+
+                                  if (isOverdue && !_warningDialogShown) {
                                     _warningDialogShown = true;
 
                                     WidgetsBinding.instance
@@ -190,18 +202,6 @@ class _TasksScreenState extends State<TasksScreen> {
                                       },
                                     );
                                   }
-                                  final now = DateTime.now();
-                                  final isOverdue = task.stopDateTime != null &&
-                                          task.endTime != null
-                                      ? DateTime(
-                                          task.stopDateTime!.year,
-                                          task.stopDateTime!.month,
-                                          task.stopDateTime!.day,
-                                          task.endTime!.hour,
-                                          task.endTime!.minute,
-                                        ).isBefore(now)
-                                      : task.stopDateTime?.isBefore(now) ??
-                                          false;
 
                                   return TaskItemView(
                                     taskModel: state.tasks[index],

@@ -32,5 +32,5 @@ class DeleteTaskEvent extends TasksEvent {
 class SearchTaskEvent extends TasksEvent {
   final String keywords;
 
-  SearchTaskEvent({required this.keywords});
+  SearchTaskEvent(val, {required this.keywords});
 }

@@ -9,7 +9,7 @@ DateTime toDate({required String dateTime}) {
 
 String formatDate({required String dateTime, format = "dd MMM, yyyy"}) {
   final localDateTime = toDate(dateTime: dateTime);
-  return DateFormat(format).format(localDateTime);
+  return DateFormat(format, 'KK_kk').format(localDateTime);
 }
 
 SnackBar getSnackBar(String message, Color backgroundColor) {
