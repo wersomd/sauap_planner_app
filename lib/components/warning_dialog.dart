@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sauap_planner/utils/color_palette.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../utils/util.dart';
+
 class WarningDialog extends StatelessWidget {
   final String charity;
   const WarningDialog({super.key, required this.charity});
@@ -9,12 +11,10 @@ class WarningDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     Future<void> launchURL(String url) async {
       final uri = Uri.parse(url);
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri);
+      if (await launchUrl(uri)) {
+        await canLaunchUrl(uri);
       } else {
-        ScaffoldMessenger.of(context.mounted as BuildContext).showSnackBar(
-          const SnackBar(content: Text('Could not launch URL')),
-        );
+        getSnackBar('Ошибка', kRed);
       }
     }
 

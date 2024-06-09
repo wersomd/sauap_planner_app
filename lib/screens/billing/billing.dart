@@ -4,6 +4,7 @@ import 'package:sauap_planner/components/custom_menu.dart';
 import 'package:sauap_planner/components/widgets.dart';
 import 'package:sauap_planner/screens/billing/model/billing.model.dart';
 import 'package:sauap_planner/utils/color_palette.dart';
+import 'package:sauap_planner/utils/util.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class BillingPage extends StatefulWidget {
@@ -18,12 +19,10 @@ class _BillingPageState extends State<BillingPage> {
 
   Future<void> _launchURL(String url) async {
     final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+    if (await launchUrl(uri)) {
+      await canLaunchUrl(uri);
     } else {
-      ScaffoldMessenger.of(context.mounted as BuildContext).showSnackBar(
-        const SnackBar(content: Text('Could not launch URL')),
-      );
+        getSnackBar('Ошибка', kRed);
     }
   }
 
